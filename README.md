@@ -1,6 +1,6 @@
 # Simulador de Conta Bancaria em Java Puro
 
-Projeto de estudo desenvolvido em Java puro, com execucao pelo terminal. O objetivo e praticar fundamentos da linguagem Java criando um sistema bancario simples, sem Spring Boot, sem banco de dados e sem interface grafica.
+Projeto de estudo desenvolvido em Java puro, com execução pelo terminal. O objetivo e praticar fundamentos da linguagem Java criando um sistema bancario simples, sem Spring Boot, sem banco de dados e sem interface grafica.
 
 ## Funcionalidades
 
@@ -60,4 +60,4 @@ java -cp out app.Main
 
 ## Observacao
 
-Este e um projeto educacional, criado para praticar conceitos fundamentais de Java. Ele pode evoluir futuramente com novas funcionalidades, melhorias de organizacao e persistencia de dados.
+Este é um projeto educacional, criado para praticar conceitos fundamentais de Java. Ele pode evoluir futuramente com novas funcionalidades, melhorias de organizacao e persistencia de dados.
