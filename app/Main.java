@@ -95,7 +95,30 @@ public class Main{
             }
         }
     }
+    public static void sacar(Scanner scanner, Banco banco) {
+        System.out.println("Saque foi selecionado.");
 
+        if (banco.estaVazio()) {
+            System.out.println("Nenhuma conta cadastrada.");
+        } else {
+            int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
+            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
+
+            if (contaEncontrada != null) {
+                double valorSaque = lerDouble(scanner, "Digite o valor a ser sacado:");
+                boolean saqueRealizado = contaEncontrada.sacar(valorSaque);
+
+                if (saqueRealizado) {
+                    System.out.println("Saque realizado com sucesso.");
+                    mostrarDadosConta(contaEncontrada);
+                } else {
+                    System.out.println("Saque não realizado.");
+                }
+            } else {
+                System.out.println("Conta não encontrada.");
+            }
+        }
+    }
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -122,33 +145,10 @@ public class Main{
                     break;
                 }
 
-                case 3:{
-                    System.out.println("Saque foi selecionado.");
-
-                    if (banco.estaVazio()) {
-                        System.out.println("Nenhuma conta cadastrada.");
-                    } else {
-                        int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                        Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
-                        
-                            if (contaEncontrada != null) {
-                            double valorSaque = lerDouble(scanner, "Digite o valor a ser sacado:");
-                            boolean saqueRealizado = contaEncontrada.sacar(valorSaque);
-                                if (saqueRealizado) {
-                                    System.out.println("Saque realizado com sucesso.");
-                                    mostrarDadosConta(contaEncontrada);
-
-                                } 
-                                else {
-                                    System.out.println("Saque não.");
-                                }
-                            } 
-                            else {
-                                System.out.println("Conta não encontrada.");
-                            }
-                        }
-                    }
-                break;
+                case 3:{          
+                    sacar(scanner, banco);
+                    break;
+                }
 
                 case 4:{
                 int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
