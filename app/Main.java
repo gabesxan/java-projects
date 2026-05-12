@@ -1,9 +1,9 @@
 package app;
+
 import java.util.InputMismatchException;
 import java.util.Scanner;
 import model.Banco;
 import model.Conta;
-import model.Tipo_Operacao;
 
 public class Main{
    public static void mostrarMenu(){
@@ -151,7 +151,7 @@ public class Main{
                     break;
                 }
                 
-                case 5:
+                case 5:{
                     if(banco.estaVazio()){
                     System.out.println("Sem nenhuma conta cadastrada");
                     }
@@ -162,7 +162,7 @@ public class Main{
                         }
                     }
                 break;
-    
+                }
                 case 6:{
                     int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
                     Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
@@ -180,52 +180,28 @@ public class Main{
                 
                 
                case 7:{
-                 System.out.println("Transfêrencia foi selecionada.");
-                    if (banco.quantidadeDeContas() < 2){
-                        System.out.println("Não é possivel fazer uma transfêrencia");
-                    }
-                    else{ 
-                    int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
-                        Conta origem = banco.buscarContaPorNumero(numeroOrigem);
+                    System.out.println("Transfêrencia foi selecionada.");
 
-                    int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
-                        Conta destino = banco.buscarContaPorNumero(numeroDestino);
-
-                        if (origem != null && destino != null) {
-                            System.out.println("Origem: " + origem.getTitular());
-                            System.out.println("Destino: " + destino.getTitular());
+                        if (banco.quantidadeDeContas() < 2){
+                            System.out.println("Não é possivel fazer uma transfêrencia");
+                        }
+                        else { 
+                            int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
+                            int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
                             double valorTransferencia = lerDouble(scanner, "Digite o valor da transferência:");
-                            boolean debitoRealizado = origem.debitarSemExtrato(valorTransferencia);
 
+                            boolean transferenciaRealizada = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
 
-                            if (debitoRealizado) {
-                            destino.creditarSemExtrato(valorTransferencia);
+                            if (transferenciaRealizada) {
                                 System.out.println("Transferência realizada com sucesso.");
-                                origem.registrarOperacao(
-                                       Tipo_Operacao.TRANSFERENCIA_ENVIADA,
-                                        valorTransferencia,
-                                        "Para conta " + destino.getNumero()
-                                );
-
-                                destino.registrarOperacao(
-                                    Tipo_Operacao.TRANSFERENCIA_RECEBIDA,
-                                    valorTransferencia,
-                                    "Da conta " + origem.getNumero()
-                                );
                             } 
                             else {
                                 System.out.println("Transferência não realizada.");
                             }
-                        
                         }
-                        else {
-                        System.out.println("Conta de origem ou destino não encontrada.");
-                        }
-                    }
-                
-                break;
+
+                        break;
                 }
-                
                 case 8:{
                         if (banco.estaVazio()) {
                             System.out.println("Nenhuma conta cadastrada.");
