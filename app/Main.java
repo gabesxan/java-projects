@@ -1,9 +1,10 @@
 package app;
-import java.util.ArrayList;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import model.Banco;
 import model.Conta;
 import model.Tipo_Operacao;
+
 public class Main{
    public static void mostrarMenu(){
             System.out.println("======Sistema Bancario======");
@@ -40,46 +41,34 @@ public class Main{
             }
         }
     }
-        
-    public static Conta buscarContaPorNumero(ArrayList<Conta> contas, int numeroBuscado) {
-    for (Conta c : contas) {
-        if (c.getNumero() == numeroBuscado) {
-            return c;
-        }
-    }
-    return null;
-    }  
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        ArrayList<Conta> contas = new ArrayList<>();
+        Banco banco = new Banco();
         boolean continuar = true;
         
         while (continuar) {
         mostrarMenu();
        int opcao = lerInteiro(scanner, "Escolha uma opcao:");
             switch (opcao){
-                case 0:
+                case 0:{
                     System.out.println("Saindo...");
                     continuar = false;
                 break;
-                
+                }
             
                 case 1:{
                     int numeroDigitado = lerInteiro(scanner, "Digite o numero da conta:");
-                    Conta contaExistente = buscarContaPorNumero(contas, numeroDigitado);
+                        Conta contaExistente = banco.buscarContaPorNumero(numeroDigitado);
 
                         if (contaExistente != null) {
                             System.out.println("Já existe uma conta com esse número.");
                         } 
                         else {
                             scanner.nextLine();
-
                             System.out.println("Digite o nome da conta:");
                             String nomeDigitado = scanner.nextLine();
-
                             Conta novaConta = new Conta(numeroDigitado, nomeDigitado);
-                            contas.add(novaConta);
-
+                            banco.adicionarConta(novaConta);
                             System.out.println("Conta criada para: " + novaConta.getTitular());
                             System.out.println("Numero da conta: " + novaConta.getNumero());
                         }
@@ -89,11 +78,11 @@ public class Main{
                 case 2:{
                     System.out.println("Deposito foi selecionado");
 
-                    if (contas.isEmpty()) {
+                    if (banco.estaVazio()){
                         System.out.println("Nenhuma conta cadastrada.");
                     } else {
                             int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                            Conta contaEncontrada = buscarContaPorNumero(contas, numeroBuscado);
+                            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
                             if (contaEncontrada != null) {
                             double valorDeposito = lerDouble(scanner, "Digite o valor a ser depositado:");
                             boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
@@ -118,11 +107,11 @@ public class Main{
                 case 3:{
                     System.out.println("Saque foi selecionado.");
 
-                    if (contas.isEmpty()) {
+                    if (banco.estaVazio()) {
                         System.out.println("Nenhuma conta cadastrada.");
                     } else {
                         int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                        Conta contaEncontrada = buscarContaPorNumero(contas, numeroBuscado);
+                        Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
                         
                             if (contaEncontrada != null) {
                             double valorSaque = lerDouble(scanner, "Digite o valor a ser sacado:");
@@ -146,7 +135,8 @@ public class Main{
 
                 case 4:{
                 int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                Conta contaEncontrada = buscarContaPorNumero(contas, numeroBuscado);
+                Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
+
             
                         if (contaEncontrada != null) {
                         System.out.println("Numero da conta: " + contaEncontrada.getNumero());
@@ -161,11 +151,11 @@ public class Main{
                 }
                 
                 case 5:
-                    if(contas.isEmpty()){
+                    if(banco.estaVazio()){
                     System.out.println("Sem nenhuma conta cadastrada");
                     }
                     else {
-                        for (Conta c: contas){
+                        for (Conta c: banco.listarContas()){
                             System.out.println("Numero: " + c.getNumero());
                             System.out.println("Titular: " + c.getTitular());
                             System.out.println("Saldo: " + c.getSaldo());
@@ -176,7 +166,7 @@ public class Main{
     
                 case 6:{
                     int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                    Conta contaEncontrada = buscarContaPorNumero(contas, numeroBuscado);
+                    Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
 
                         if (contaEncontrada != null) {
@@ -193,16 +183,16 @@ public class Main{
                 
                case 7:{
                  System.out.println("Transfêrencia foi selecionada.");
-                    if (contas.size() < 2){
+                    if (banco.quantidadeDeContas() < 2){
                         System.out.println("Não é possivel fazer uma transfêrencia");
                     }
                     else{ 
                     int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
-                        Conta origem = buscarContaPorNumero(contas, numeroOrigem);
+                        Conta origem = banco.buscarContaPorNumero(numeroOrigem);
 
                     int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
-                        Conta destino = buscarContaPorNumero(contas, numeroDestino);
-                        
+                        Conta destino = banco.buscarContaPorNumero(numeroDestino);
+
                         if (origem != null && destino != null) {
                             System.out.println("Origem: " + origem.getTitular());
                             System.out.println("Destino: " + destino.getTitular());
@@ -239,12 +229,12 @@ public class Main{
                 }
                 
                 case 8:{
-                        if (contas.isEmpty()) {
+                        if (banco.estaVazio()) {
                             System.out.println("Nenhuma conta cadastrada.");
                         } 
                         else {
                             int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                            Conta contaEncontrada = buscarContaPorNumero(contas, numeroBuscado);
+                            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
                             if (contaEncontrada != null) {
                                 if (contaEncontrada.getExtrato().isEmpty()) {
