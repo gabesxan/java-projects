@@ -8,17 +8,23 @@ import model.Tipo_Operacao;
 public class Main{
    public static void mostrarMenu(){
             System.out.println("======Sistema Bancario======");
-            System.out.println("1 - Criar conta: ");
-            System.out.println("2 - Deposito: "); 
-            System.out.println("3 - Saque: ");
-            System.out.println("4 - Consulta de saldo: ");
-            System.out.println("5 - Listar contas:");
-            System.out.println("6 - Pesquisar uma conta:");
+            System.out.println("1 - Criar conta");
+            System.out.println("2 - Depósito "); 
+            System.out.println("3 - Saque ");
+            System.out.println("4 - Consulta de saldo ");
+            System.out.println("5 - Listar contas ");
+            System.out.println("6 - Buscar conta por número ");
             System.out.println("7 - Transferência");
             System.out.println("8 - Gerar extrato ");
-            System.out.println("0 - Sair:");
+            System.out.println("0 - Sair");
             System.out.println("===========================");
    }
+
+   public static void mostrarDadosConta(Conta conta) {
+    System.out.println("Numero: " + conta.getNumero());
+    System.out.println("Titular: " + conta.getTitular());
+    System.out.println("Saldo: " + conta.getSaldo());
+}
     public static double lerDouble(Scanner scanner, String mensagem) {
         while (true) {
             try {
@@ -88,9 +94,7 @@ public class Main{
                             boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
                             if (depositoRealizado) {
                                 System.out.println("Depósito realizado com sucesso.");
-                                System.out.println("Numero da conta: " + contaEncontrada.getNumero());
-                                System.out.println("Titular: " + contaEncontrada.getTitular());
-                                System.out.println("Saldo: " + contaEncontrada.getSaldo());
+                                mostrarDadosConta(contaEncontrada);
                             } 
                             else {
                                 System.out.println("Valor depositado inválido.");
@@ -118,9 +122,8 @@ public class Main{
                             boolean saqueRealizado = contaEncontrada.sacar(valorSaque);
                                 if (saqueRealizado) {
                                     System.out.println("Saque realizado com sucesso.");
-                                    System.out.println("Numero da conta: " + contaEncontrada.getNumero());
-                                    System.out.println("Titular: " + contaEncontrada.getTitular());
-                                    System.out.println("Saldo: " + contaEncontrada.getSaldo());
+                                    mostrarDadosConta(contaEncontrada);
+
                                 } 
                                 else {
                                     System.out.println("Saque não.");
@@ -139,9 +142,7 @@ public class Main{
 
             
                         if (contaEncontrada != null) {
-                        System.out.println("Numero da conta: " + contaEncontrada.getNumero());
-                        System.out.println("Titular: " + contaEncontrada.getTitular());
-                        System.out.println("Saldo: " + contaEncontrada.getSaldo());
+                        mostrarDadosConta(contaEncontrada);
                         } 
                         else {
                         System.out.println("Conta não encontrada.");
@@ -156,9 +157,7 @@ public class Main{
                     }
                     else {
                         for (Conta c: banco.listarContas()){
-                            System.out.println("Numero: " + c.getNumero());
-                            System.out.println("Titular: " + c.getTitular());
-                            System.out.println("Saldo: " + c.getSaldo());
+                            mostrarDadosConta(c);
                         
                         }
                     }
@@ -170,9 +169,8 @@ public class Main{
 
 
                         if (contaEncontrada != null) {
-                            System.out.println("Numero: " + contaEncontrada.getNumero());
-                            System.out.println("Titular: " + contaEncontrada.getTitular());
-                            System.out.println("Saldo: " + contaEncontrada.getSaldo());
+                            mostrarDadosConta(contaEncontrada);
+                            
                         } else {
                             System.out.println("Conta não encontrada");
                         }
