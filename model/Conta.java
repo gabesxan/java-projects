@@ -14,7 +14,7 @@ public class Conta {
     extrato = new ArrayList<>();
     }
     public ArrayList<String> getExtrato(){
-    return extrato;
+    return new ArrayList<>(extrato);
     }
 
     public int getNumero(){
