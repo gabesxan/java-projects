@@ -32,7 +32,7 @@ public class Banco {
     }
 
     public ArrayList<Conta> listarContas() {
-        return contas;
+        return new ArrayList<>(contas);
     }
 
     public ResultadoTransferencia transferir(int numeroOrigem, int numeroDestino, double valor) {
