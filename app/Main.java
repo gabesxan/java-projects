@@ -7,7 +7,7 @@ import model.Conta;
 import model.ResultadoTransferencia;
 
 public class Main{
-   public static void mostrarMenu(){
+    public static void mostrarMenu(){
             System.out.println("======Sistema Bancario======");
             System.out.println("1 - Criar conta");
             System.out.println("2 - Depósito "); 
@@ -26,6 +26,7 @@ public class Main{
     System.out.println("Titular: " + conta.getTitular());
     System.out.println("Saldo: " + conta.getSaldo());
 }
+
     public static double lerDouble(Scanner scanner, String mensagem) {
         while (true) {
             try {
@@ -37,6 +38,7 @@ public class Main{
             }
         }
     }
+
     public static int lerInteiro(Scanner scanner, String mensagem) {
         while (true) {
             try {
@@ -48,11 +50,33 @@ public class Main{
             }
         }
     }
+
+    public static void criarConta(Scanner scanner, Banco banco) {
+        int numeroDigitado = lerInteiro(scanner, "Digite o numero da conta:");
+        Conta contaExistente = banco.buscarContaPorNumero(numeroDigitado);
+
+        if (contaExistente != null) {
+            System.out.println("Já existe uma conta com esse número.");
+        } 
+        else {
+            scanner.nextLine();
+
+            System.out.println("Digite o nome da conta:");
+            String nomeDigitado = scanner.nextLine();
+
+            Conta novaConta = new Conta(numeroDigitado, nomeDigitado);
+            banco.adicionarConta(novaConta);
+
+            System.out.println("Conta criada para: " + novaConta.getTitular());
+            System.out.println("Numero da conta: " + novaConta.getNumero());
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Banco banco = new Banco();
         boolean continuar = true;
-        
+
         while (continuar) {
         mostrarMenu();
        int opcao = lerInteiro(scanner, "Escolha uma opcao:");
@@ -64,23 +88,9 @@ public class Main{
                 }
             
                 case 1:{
-                    int numeroDigitado = lerInteiro(scanner, "Digite o numero da conta:");
-                        Conta contaExistente = banco.buscarContaPorNumero(numeroDigitado);
-
-                        if (contaExistente != null) {
-                            System.out.println("Já existe uma conta com esse número.");
-                        } 
-                        else {
-                            scanner.nextLine();
-                            System.out.println("Digite o nome da conta:");
-                            String nomeDigitado = scanner.nextLine();
-                            Conta novaConta = new Conta(numeroDigitado, nomeDigitado);
-                            banco.adicionarConta(novaConta);
-                            System.out.println("Conta criada para: " + novaConta.getTitular());
-                            System.out.println("Numero da conta: " + novaConta.getNumero());
-                        }
+                    criarConta(scanner, banco);
                 break;
-                }
+                    }
 
                 case 2:{
                     System.out.println("Deposito foi selecionado");
