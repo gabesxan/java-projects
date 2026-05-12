@@ -34,4 +34,43 @@ public class Banco {
     public ArrayList<Conta> listarContas() {
         return contas;
     }
+
+    public ResultadoTransferencia transferir(int numeroOrigem, int numeroDestino, double valor) {
+        Conta origem = buscarContaPorNumero(numeroOrigem);
+        Conta destino = buscarContaPorNumero(numeroDestino);
+
+        if (origem == null) {
+            return ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA;
+        }
+
+        if (destino == null) {
+            return ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA;
+        }
+
+        if (valor <= 0) {
+            return ResultadoTransferencia.VALOR_INVALIDO;
+        }
+
+        boolean debitoRealizado = origem.debitarSemExtrato(valor);
+
+        if (!debitoRealizado) {
+            return ResultadoTransferencia.SALDO_INSUFICIENTE;
+        }
+
+        destino.creditarSemExtrato(valor);
+
+        origem.registrarOperacao(
+            Tipo_Operacao.TRANSFERENCIA_ENVIADA,
+            valor,
+            "Para conta " + destino.getNumero()
+        );
+
+        destino.registrarOperacao(
+            Tipo_Operacao.TRANSFERENCIA_RECEBIDA,
+            valor,
+            "Da conta " + origem.getNumero()
+        );
+
+        return ResultadoTransferencia.SUCESSO;
+    }
 }

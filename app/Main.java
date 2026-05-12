@@ -4,6 +4,7 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 import model.Banco;
 import model.Conta;
+import model.ResultadoTransferencia;
 
 public class Main{
    public static void mostrarMenu(){
@@ -190,17 +191,26 @@ public class Main{
                             int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
                             double valorTransferencia = lerDouble(scanner, "Digite o valor da transferência:");
 
-                            boolean transferenciaRealizada = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
+                            ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
 
-                            if (transferenciaRealizada) {
-                                System.out.println("Transferência realizada com sucesso.");
+                            if (resultado == ResultadoTransferencia.SUCESSO) {
+                                    System.out.println("Transferência realizada com sucesso.");
                             } 
-                            else {
-                                System.out.println("Transferência não realizada.");
+                            else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
+                                    System.out.println("Conta de origem não encontrada.");
+                            }
+                            else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
+                                    System.out.println("Conta de destino não encontrada.");
+                            }
+                            else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
+                                    System.out.println("Valor de transferência inválido.");
+                                }
+                            else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
+                                    System.out.println("Saldo insuficiente.");
                             }
                         }
 
-                        break;
+                    break;
                 }
                 case 8:{
                         if (banco.estaVazio()) {
