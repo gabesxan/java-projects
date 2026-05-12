@@ -71,6 +71,31 @@ public class Main{
             System.out.println("Numero da conta: " + novaConta.getNumero());
         }
     }
+    public static void depositar(Scanner scanner, Banco banco) {
+        System.out.println("Deposito foi selecionado");
+
+        if (banco.estaVazio()) {
+            System.out.println("Nenhuma conta cadastrada.");
+        } else {
+            int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
+            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
+
+            if (contaEncontrada != null) {
+                double valorDeposito = lerDouble(scanner, "Digite o valor a ser depositado:");
+                boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
+
+                if (depositoRealizado) {
+                    System.out.println("Depósito realizado com sucesso.");
+                    mostrarDadosConta(contaEncontrada);
+                } else {
+                    System.out.println("Valor depositado inválido.");
+                }
+            } else {
+                System.out.println("Conta não encontrada.");
+            }
+        }
+    }
+
 
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
@@ -93,30 +118,8 @@ public class Main{
                     }
 
                 case 2:{
-                    System.out.println("Deposito foi selecionado");
-
-                    if (banco.estaVazio()){
-                        System.out.println("Nenhuma conta cadastrada.");
-                    } else {
-                            int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
-                            if (contaEncontrada != null) {
-                            double valorDeposito = lerDouble(scanner, "Digite o valor a ser depositado:");
-                            boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
-                            if (depositoRealizado) {
-                                System.out.println("Depósito realizado com sucesso.");
-                                mostrarDadosConta(contaEncontrada);
-                            } 
-                            else {
-                                System.out.println("Valor depositado inválido.");
-                            }
-                        } 
-                        else {
-                            System.out.println("Conta não encontrada.");
-                        }
-                    }
-
-                break;
+                    depositar(scanner, banco);
+                    break;
                 }
 
                 case 3:{
