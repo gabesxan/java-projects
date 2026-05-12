@@ -1,5 +1,5 @@
 package model;
-public enum Tipo_Operacao {
+public enum TipoOperacao {
     DEPOSITO,
     SAQUE,
     TRANSFERENCIA_ENVIADA,

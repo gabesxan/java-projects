@@ -60,13 +60,13 @@ public class Banco {
         destino.creditarSemExtrato(valor);
 
         origem.registrarOperacao(
-            Tipo_Operacao.TRANSFERENCIA_ENVIADA,
+            TipoOperacao.TRANSFERENCIA_ENVIADA,
             valor,
             "Para conta " + destino.getNumero()
         );
 
         destino.registrarOperacao(
-            Tipo_Operacao.TRANSFERENCIA_RECEBIDA,
+            TipoOperacao.TRANSFERENCIA_RECEBIDA,
             valor,
             "Da conta " + origem.getNumero()
         );
