@@ -1,8 +1,18 @@
 package model;
 
 public enum TipoOperacao {
-    DEPOSITO,
-    SAQUE,
-    TRANSFERENCIA_ENVIADA,
-    TRANSFERENCIA_RECEBIDA
+    DEPOSITO("Depósito"),
+    SAQUE("Saque"),
+    TRANSFERENCIA_ENVIADA("Transferência enviada"),
+    TRANSFERENCIA_RECEBIDA("Transferência recebida");
+
+    private final String descricao;
+
+    TipoOperacao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
 }

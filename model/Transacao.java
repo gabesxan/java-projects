@@ -20,7 +20,7 @@ public class Transacao {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
         String valorFormatado = String.format("%.2f", valor);
         String dataFormatada = dataHora.format(formatter);
-        return dataFormatada + " - " + tipo + " - R$ " + valorFormatado + " - " + descricao;
+        return dataFormatada + " - " + tipo.getDescricao() + " - R$ " + valorFormatado + " - " + descricao;
     }
 
     public TipoOperacao getTipo() {
