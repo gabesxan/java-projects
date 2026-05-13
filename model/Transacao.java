@@ -18,8 +18,9 @@ public class Transacao {
 
     public String formatarParaExtrato() {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String valorFormatado = String.format("%.2f", valor);
         String dataFormatada = dataHora.format(formatter);
-        return dataFormatada + " - " + tipo + " - R$ " + valor + " - " + descricao;
+        return dataFormatada + " - " + tipo + " - R$ " + valorFormatado + " - " + descricao;
     }
 
     public TipoOperacao getTipo() {
