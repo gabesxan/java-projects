@@ -155,7 +155,37 @@ public class Main{
         }
     }
 
-    public static void main(String[] args) {
+    public static void transferir(Scanner scanner, Banco banco) {
+    System.out.println("Transfêrencia foi selecionada.");
+
+        if (banco.quantidadeDeContas() < 2) {
+            System.out.println("Não é possivel fazer uma transfêrencia");
+        } 
+        else {
+            int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
+            int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
+            double valorTransferencia = lerDouble(scanner, "Digite o valor da transferência:");
+
+            ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
+
+                if (resultado == ResultadoTransferencia.SUCESSO) {
+                    System.out.println("Transferência realizada com sucesso.");
+                } 
+                else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
+                    System.out.println("Conta de origem não encontrada.");
+                } 
+                else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
+                    System.out.println("Conta de destino não encontrada.");
+                } 
+                else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
+                    System.out.println("Valor de transferência inválido.");
+                } 
+                else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
+                    System.out.println("Saldo insuficiente.");
+                }
+            }
+        }
+        public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Banco banco = new Banco();
         boolean continuar = true;
@@ -203,37 +233,9 @@ public class Main{
                    }   
                 
                 
-               case 7:{
-                    System.out.println("Transfêrencia foi selecionada.");
-
-                        if (banco.quantidadeDeContas() < 2){
-                            System.out.println("Não é possivel fazer uma transfêrencia");
-                        }
-                        else { 
-                            int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
-                            int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
-                            double valorTransferencia = lerDouble(scanner, "Digite o valor da transferência:");
-
-                            ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
-
-                            if (resultado == ResultadoTransferencia.SUCESSO) {
-                                    System.out.println("Transferência realizada com sucesso.");
-                            } 
-                            else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
-                                    System.out.println("Conta de origem não encontrada.");
-                            }
-                            else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
-                                    System.out.println("Conta de destino não encontrada.");
-                            }
-                            else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
-                                    System.out.println("Valor de transferência inválido.");
-                                }
-                            else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
-                                    System.out.println("Saldo insuficiente.");
-                            }
-                        }
-
-                    break;
+                case 7:{
+                transferir(scanner, banco);
+                break;
                 }
                 case 8:{
                         if (banco.estaVazio()) {
