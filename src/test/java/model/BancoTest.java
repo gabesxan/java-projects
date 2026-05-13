@@ -1,8 +1,9 @@
 package model;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class BancoTest {
 
@@ -120,3 +121,5 @@ class BancoTest {
 
         assertEquals(TipoOperacao.TRANSFERENCIA_ENVIADA, origem.getExtrato().get(1).getTipo());
         assertEquals(TipoOperacao.TRANSFERENCIA_RECEBIDA, destino.getExtrato().get(0).getTipo());
+    }
+}
