@@ -71,6 +71,7 @@ public class Main{
             System.out.println("Numero da conta: " + novaConta.getNumero());
         }
     }
+  
     public static void depositar(Scanner scanner, Banco banco) {
         System.out.println("Deposito foi selecionado");
 
@@ -95,6 +96,7 @@ public class Main{
             }
         }
     }
+  
     public static void sacar(Scanner scanner, Banco banco) {
         System.out.println("Saque foi selecionado.");
 
@@ -119,7 +121,9 @@ public class Main{
             }
         }
     }
+  
     public static void consultarSaldo(Scanner scanner, Banco banco) {
+
         int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
         Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
@@ -129,6 +133,17 @@ public class Main{
             System.out.println("Conta não encontrada.");
         }
     }
+  
+    public static void listarContas(Banco banco) {
+        if (banco.estaVazio()) {
+            System.out.println("Sem nenhuma conta cadastrada");
+        } else {
+            for (Conta c : banco.listarContas()) {
+                mostrarDadosConta(c);
+            }
+        }
+    }
+
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Banco banco = new Banco();
@@ -148,34 +163,28 @@ public class Main{
                     criarConta(scanner, banco);
                 break;
                     }
-
+                
                 case 2:{
                     depositar(scanner, banco);
                     break;
                 }
-
+                
                 case 3:{          
                     sacar(scanner, banco);
                     break;
                 }
-
+              
                 case 4:{       
                     consultarSaldo(scanner, banco);
                     break;
                 }
                 
+             
                 case 5:{
-                    if(banco.estaVazio()){
-                    System.out.println("Sem nenhuma conta cadastrada");
-                    }
-                    else {
-                        for (Conta c: banco.listarContas()){
-                            mostrarDadosConta(c);
-                        
-                        }
-                    }
-                break;
+                    listarContas(banco);
+                    break;
                 }
+               
                 case 6:{
                     int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
                     Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
