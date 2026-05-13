@@ -21,22 +21,28 @@ public class AplicacaoBancaria {
         while (continuar) {
             mostrarMenu();
             int opcao = lerInteiro("Escolha uma opção:");
-            switch (opcao) {
-                case 0 -> {
-                    System.out.println("Saindo...");
-                    continuar = false;
-                }
-                case 1 -> criarConta();
-                case 2 -> depositar();
-                case 3 -> sacar();
-                case 4 -> consultarSaldo();
-                case 5 -> listarContas();
-                case 6 -> buscarConta();
-                case 7 -> transferir();
-                case 8 -> gerarExtrato();
-                default -> System.out.println("Opção inválida.");
-            }
+            continuar = processarOpcao(opcao);
         }
+    }
+
+    private boolean processarOpcao(int opcao) {
+        switch (opcao) {
+            case 0 -> {
+                System.out.println("Saindo...");
+                return false;
+            }
+            case 1 -> criarConta();
+            case 2 -> depositar();
+            case 3 -> sacar();
+            case 4 -> consultarSaldo();
+            case 5 -> listarContas();
+            case 6 -> buscarConta();
+            case 7 -> transferir();
+            case 8 -> gerarExtrato();
+            default -> System.out.println("Opção inválida.");
+        }
+
+        return true;
     }
 
     private int lerInteiro(String mensagem) {
@@ -201,7 +207,6 @@ public class AplicacaoBancaria {
                 case VALOR_INVALIDO -> System.out.println("Valor de transferência inválido.");
                 case SALDO_INSUFICIENTE -> System.out.println("Saldo insuficiente.");
             }
-
         }
     }
 
