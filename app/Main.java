@@ -185,6 +185,29 @@ public class Main{
                 }
             }
         }
+    
+    public static void gerarExtrato(Scanner scanner, Banco banco) {
+        if (banco.estaVazio()) {
+            System.out.println("Nenhuma conta cadastrada.");
+        } else {
+            int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
+            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
+
+            if (contaEncontrada != null) {
+                if (contaEncontrada.getExtrato().isEmpty()) {
+                    System.out.println("Nenhuma operação realizada.");
+                } else {
+                    for (String linha : contaEncontrada.getExtrato()) {
+                        System.out.println(linha);
+                    }
+                }
+            } else {
+                System.out.println("Conta não encontrada.");
+            }
+        }
+    }
+
+
         public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Banco banco = new Banco();
@@ -238,29 +261,9 @@ public class Main{
                 break;
                 }
                 case 8:{
-                        if (banco.estaVazio()) {
-                            System.out.println("Nenhuma conta cadastrada.");
-                        } 
-                        else {
-                            int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                            Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
-
-                            if (contaEncontrada != null) {
-                                if (contaEncontrada.getExtrato().isEmpty()) {
-                                    System.out.println("Nenhuma operação realizada.");
-                                } 
-                                else {
-                                    for (String linha : contaEncontrada.getExtrato()) {
-                                        System.out.println(linha);
-                                    }
-                                }
-                            } 
-                            else {
-                                System.out.println("Conta não encontrada.");
-                            }
-                        }
-                break; 
-                    }  
+                    gerarExtrato(scanner, banco);
+                    break; 
+                }  
                 
                 default:{
                     System.out.println("Opcao invalida");
