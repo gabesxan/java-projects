@@ -92,6 +92,51 @@ Depois execute a classe principal:
 java -cp out app.Main
 ```
 
+## Testes automatizados simples
+
+Além dos testes manuais pelo menu, o projeto possui uma classe de teste simples em Java puro:
+
+```text
+test/TesteBanco.java
+```
+
+Esse projeto não usa framework externo de testes. Ou seja, não depende de Maven, Gradle ou JUnit para validar as regras principais. A classe `TesteBanco` possui um método `main` e executa verificações por meio de um método auxiliar chamado `verificar(...)`.
+
+Os testes validam comportamentos importantes do domínio bancário:
+
+- depósito válido;
+- depósito inválido;
+- saque válido;
+- saque com saldo insuficiente;
+- busca de conta existente;
+- busca de conta inexistente;
+- transferência válida;
+- transferência com saldo insuficiente;
+- transferência para a mesma conta;
+- registro de depósito no extrato;
+- registro de saque no extrato;
+- garantia de que transferência para a mesma conta não registra extrato.
+
+Para compilar a aplicação junto com a classe de teste, execute na raiz do projeto:
+
+```bash
+javac -d out app/Main.java app/AplicacaoBancaria.java model/Conta.java model/Banco.java model/Transacao.java model/TipoOperacao.java model/ResultadoTransferencia.java test/TesteBanco.java
+```
+
+Depois, execute os testes com:
+
+```bash
+java -cp out test.TesteBanco
+```
+
+A saída esperada mostra mensagens indicando quais verificações passaram. Exemplos:
+
+```text
+PASSOU: depósito válido
+PASSOU: transferência válida
+PASSOU: transferência para mesma conta não registra extrato
+```
+
 ## Checklist de testes manuais
 
 Depois de executar o programa pelo terminal, use o menu para validar manualmente as principais funcionalidades:
@@ -125,6 +170,8 @@ Depois de executar o programa pelo terminal, use o menu para validar manualmente
 │   ├── ResultadoTransferencia.java
 │   ├── TipoOperacao.java
 │   └── Transacao.java
+├── test
+│   └── TesteBanco.java
 └── README.md
 ```
 
