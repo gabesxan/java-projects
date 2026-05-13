@@ -206,6 +206,7 @@ public class AplicacaoBancaria {
                 case CONTA_DESTINO_NAO_ENCONTRADA -> System.out.println("Conta de destino não encontrada.");
                 case VALOR_INVALIDO -> System.out.println("Valor de transferência inválido.");
                 case SALDO_INSUFICIENTE -> System.out.println("Saldo insuficiente.");
+                case CONTAS_IGUAIS -> System.out.println("A conta de origem e destino devem ser diferentes.");
             }
         }
     }

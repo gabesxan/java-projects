@@ -5,5 +5,7 @@ public enum ResultadoTransferencia {
     CONTA_ORIGEM_NAO_ENCONTRADA,
     CONTA_DESTINO_NAO_ENCONTRADA,
     VALOR_INVALIDO,
+    CONTAS_IGUAIS,
     SALDO_INSUFICIENTE
+    
 }
