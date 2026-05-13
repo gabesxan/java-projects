@@ -22,7 +22,7 @@ public class Main {
     }
 
     public static void mostrarDadosConta(Conta conta) {
-        System.out.println("Numero: " + conta.getNumero());
+        System.out.println("Número: " + conta.getNumero());
         System.out.println("Titular: " + conta.getTitular());
         System.out.println("Saldo: " + conta.getSaldo());
     }
@@ -52,7 +52,7 @@ public class Main {
     }
 
     public static void criarConta(Scanner scanner, Banco banco) {
-        int numeroDigitado = lerInteiro(scanner, "Digite o numero da conta:");
+        int numeroDigitado = lerInteiro(scanner, "Digite o número da conta:");
         Conta contaExistente = banco.buscarContaPorNumero(numeroDigitado);
 
         if (contaExistente != null) {
@@ -67,12 +67,12 @@ public class Main {
             banco.adicionarConta(novaConta);
 
             System.out.println("Conta criada para: " + novaConta.getTitular());
-            System.out.println("Numero da conta: " + novaConta.getNumero());
+            System.out.println("Número da conta: " + novaConta.getNumero());
         }
     }
 
     public static void depositar(Scanner scanner, Banco banco) {
-        System.out.println("Deposito foi selecionado");
+        System.out.println("Depósito foi selecionado");
 
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
@@ -143,7 +143,7 @@ public class Main {
         System.out.println("Transfêrencia foi selecionada.");
 
         if (banco.quantidadeDeContas() < 2) {
-            System.out.println("Não é possivel fazer uma transfêrencia");
+            System.out.println("Não é possível fazer uma transfêrencia.");
         } else {
             int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
             int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
@@ -253,7 +253,7 @@ public class Main {
                 }
 
                 default: {
-                    System.out.println("Opcao invalida");
+                    System.out.println("Opção inválida.");
                     break;
                 }
             }
