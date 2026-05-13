@@ -92,6 +92,26 @@ Depois execute a classe principal:
 java -cp out app.Main
 ```
 
+## Checklist de testes manuais
+
+Depois de executar o programa pelo terminal, use o menu para validar manualmente as principais funcionalidades:
+
+- [ ] Criar uma conta com sucesso: escolha a opção de criar conta, informe um número ainda não usado e um nome de titular. O sistema deve confirmar a criação da conta.
+- [ ] Tentar criar uma conta com número repetido: use novamente um número de conta já cadastrado. O sistema deve informar que já existe uma conta com esse número.
+- [ ] Depositar um valor válido: escolha a opção de depósito, informe uma conta existente e um valor maior que zero. O saldo da conta deve aumentar.
+- [ ] Tentar depositar um valor inválido: informe valor zero ou negativo no depósito. O sistema deve recusar a operação.
+- [ ] Sacar um valor válido: faça um saque com valor maior que zero e menor ou igual ao saldo disponível. O saldo da conta deve diminuir.
+- [ ] Tentar sacar valor maior que o saldo: informe um valor acima do saldo disponível. O sistema deve recusar o saque e manter o saldo.
+- [ ] Consultar saldo: escolha a opção de consulta e informe uma conta existente. O sistema deve mostrar número, titular e saldo atual.
+- [ ] Listar contas: cadastre uma ou mais contas e escolha a opção de listagem. O sistema deve exibir os dados das contas cadastradas.
+- [ ] Buscar conta por número: informe o número de uma conta existente. O sistema deve mostrar os dados dessa conta.
+- [ ] Transferir entre contas diferentes: crie duas contas, deposite saldo na conta de origem e transfira um valor válido para a conta de destino. O saldo da origem deve diminuir e o saldo do destino deve aumentar.
+- [ ] Tentar transferir para a mesma conta: informe o mesmo número para origem e destino. A transferência deve ser recusada.
+- [ ] Tentar transferir com saldo insuficiente: informe uma transferência maior que o saldo da conta de origem. O sistema deve recusar a operação.
+- [ ] Gerar extrato: realize depósito, saque ou transferência e depois escolha a opção de extrato. O sistema deve listar as operações registradas.
+- [ ] Conferir o formato do extrato: cada item deve mostrar data/hora, tipo da operação, valor formatado e descrição.
+- [ ] Confirmar que transferência para a mesma conta não altera saldo nem extrato: consulte o saldo e gere o extrato antes e depois da tentativa. O saldo deve permanecer igual e nenhuma nova transação deve ser adicionada.
+
 ## Estrutura do projeto
 
 ```text
