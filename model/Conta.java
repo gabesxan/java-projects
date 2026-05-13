@@ -70,7 +70,7 @@ public class Conta {
         if (valor <= 0) {
             return false;
         }
-
+        
         if (saldo >= valor) {
             saldo = saldo - valor;
             registrarOperacao(TipoOperacao.SAQUE, valor, "Saque realizado");
