@@ -3,7 +3,7 @@ package model;
 import java.util.ArrayList;
 
 public class Banco {
-    private ArrayList<Conta> contas;
+    private final ArrayList<Conta> contas;
 
     public Banco() {
         contas = new ArrayList<>();

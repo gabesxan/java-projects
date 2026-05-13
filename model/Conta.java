@@ -4,10 +4,10 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Conta {
-    private ArrayList<String> extrato;
-    private String titular;
+    private final ArrayList<String> extrato;
+    private final String titular;
     private double saldo;
-    private int numero;
+    private final int numero;
 
     public Conta(int numero, String titularInicial) {
         this.numero = numero;

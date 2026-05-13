@@ -75,8 +75,6 @@ public class AplicacaoBancaria {
                 }
             }
         }
-
-        scanner.close();
     }
 
     private int lerInteiro(String mensagem) {
