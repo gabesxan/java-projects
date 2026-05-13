@@ -1,17 +1,25 @@
-# Simulador de Conta Bancária em Java Puro
+# Projeto Banco
 
-Projeto de estudo desenvolvido em Java puro, com execução pelo terminal. O objetivo é praticar fundamentos da linguagem Java criando um sistema bancário simples, sem Spring Boot, sem banco de dados e sem interface gráfica.
+Simulador de conta bancária desenvolvido em Java puro, com execução pelo terminal. O projeto foi criado para praticar fundamentos da linguagem Java por meio de um sistema bancário simples, sem Spring Boot, sem banco de dados e sem interface gráfica.
 
 ## Funcionalidades
 
 - Criar conta
-- Depositar
-- Sacar
-- Consultar saldo
+- Realizar depósito
+- Realizar saque
+- Consultar saldo de uma conta
 - Listar contas
 - Buscar conta por número
 - Transferir entre contas
-- Gerar extrato
+- Gerar extrato de operações
+
+## Regras principais
+
+- Não é permitido criar duas contas com o mesmo número.
+- Depósitos, saques e transferências precisam ter valor maior que zero.
+- Saques e transferências dependem de saldo suficiente.
+- Transferências validam conta de origem, conta de destino, valor e saldo.
+- O extrato registra depósitos, saques e transferências enviadas ou recebidas.
 
 ## Conceitos praticados
 
@@ -20,7 +28,7 @@ Projeto de estudo desenvolvido em Java puro, com execução pelo terminal. O obj
 - `while`
 - `switch`
 - `if/else`
-- Metodos
+- Métodos
 - Classes e objetos
 - Construtores
 - Encapsulamento
@@ -32,6 +40,7 @@ Projeto de estudo desenvolvido em Java puro, com execução pelo terminal. O obj
 - `LocalDateTime`
 - Retorno defensivo de listas
 - Organização em pacotes
+- Separação de responsabilidades entre menu, banco e conta
 
 ## Atualizações realizadas
 
@@ -41,19 +50,24 @@ Projeto de estudo desenvolvido em Java puro, com execução pelo terminal. O obj
 - Criado o enum `ResultadoTransferencia` para representar os possíveis resultados de uma transferência.
 - Implementadas transferências entre contas com validação de origem, destino, valor e saldo.
 - Registradas transferências no extrato da conta de origem e da conta de destino.
-- Adicionado histórico de operações com `LocalDateTime` e `Tipo_Operacao`.
+- Adicionado histórico de operações com `LocalDateTime` e `TipoOperacao`.
 - Criado método auxiliar para exibir os dados de uma conta.
 - Ajustado `listarContas()` para retornar uma cópia da lista de contas.
 - Ajustado `getExtrato()` para retornar uma cópia do histórico da conta.
 - Melhorado o tratamento de entradas inválidas para números inteiros e valores monetários.
 - Atualizada a documentação do projeto com estrutura e comando de compilação corretos.
 
+## Requisitos
+
+- Java JDK instalado
+- Terminal para compilar e executar o projeto
+
 ## Como executar
 
 Na raiz do projeto, compile os arquivos Java:
 
 ```bash
-javac -d out app/Main.java model/Banco.java model/Conta.java model/ResultadoTransferencia.java model/Tipo_Operacao.java
+javac -d out app/Main.java model/Banco.java model/Conta.java model/ResultadoTransferencia.java model/TipoOperacao.java
 ```
 
 Depois execute a classe principal:
@@ -72,7 +86,7 @@ java -cp out app.Main
 │   ├── Banco.java
 │   ├── Conta.java
 │   ├── ResultadoTransferencia.java
-│   └── Tipo_Operacao.java
+│   └── TipoOperacao.java
 └── README.md
 ```
 
