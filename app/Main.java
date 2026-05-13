@@ -1,3 +1,4 @@
+
 package app;
 
 import java.util.InputMismatchException;
@@ -10,13 +11,13 @@ public class Main {
     public static void mostrarMenu() {
         System.out.println("======Sistema Bancario======");
         System.out.println("1 - Criar conta");
-        System.out.println("2 - Depósito ");
-        System.out.println("3 - Saque ");
-        System.out.println("4 - Consulta de saldo ");
-        System.out.println("5 - Listar contas ");
-        System.out.println("6 - Buscar conta por número ");
+        System.out.println("2 - Depósito");
+        System.out.println("3 - Saque");
+        System.out.println("4 - Consulta de saldo");
+        System.out.println("5 - Listar contas");
+        System.out.println("6 - Buscar conta por número");
         System.out.println("7 - Transferência");
-        System.out.println("8 - Gerar extrato ");
+        System.out.println("8 - Gerar extrato");
         System.out.println("0 - Sair");
         System.out.println("===========================");
     }
@@ -57,7 +58,8 @@ public class Main {
 
         if (contaExistente != null) {
             System.out.println("Já existe uma conta com esse número.");
-        } else {
+        } 
+        else {
             scanner.nextLine();
 
             System.out.println("Digite o nome da conta:");
@@ -76,7 +78,8 @@ public class Main {
 
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
-        } else {
+        } 
+        else {
             int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
             Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
@@ -87,10 +90,12 @@ public class Main {
                 if (depositoRealizado) {
                     System.out.println("Depósito realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
-                } else {
+                } 
+                else {
                     System.out.println("Valor depositado inválido.");
                 }
-            } else {
+            }
+            else {
                 System.out.println("Conta não encontrada.");
             }
         }
@@ -101,7 +106,8 @@ public class Main {
 
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
-        } else {
+        } 
+        else {
             int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
             Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
@@ -112,10 +118,12 @@ public class Main {
                 if (saqueRealizado) {
                     System.out.println("Saque realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
-                } else {
+                } 
+                else {
                     System.out.println("Saque não realizado.");
                 }
-            } else {
+            } 
+            else {
                 System.out.println("Conta não encontrada.");
             }
         }
@@ -128,7 +136,8 @@ public class Main {
     public static void listarContas(Banco banco) {
         if (banco.estaVazio()) {
             System.out.println("Sem nenhuma conta cadastrada");
-        } else {
+        } 
+        else {
             for (Conta c : banco.listarContas()) {
                 mostrarDadosConta(c);
             }
@@ -140,11 +149,12 @@ public class Main {
     }
 
     public static void transferir(Scanner scanner, Banco banco) {
-        System.out.println("Transfêrencia foi selecionada.");
+        System.out.println("Transferência foi selecionada.");
 
         if (banco.quantidadeDeContas() < 2) {
-            System.out.println("Não é possível fazer uma transfêrencia.");
-        } else {
+            System.out.println("Não é possível fazer uma transferência.");
+        } 
+        else {
             int numeroOrigem = lerInteiro(scanner, "Digite o número da conta de origem:");
             int numeroDestino = lerInteiro(scanner, "Digite o número da conta de destino:");
             double valorTransferencia = lerDouble(scanner, "Digite o valor da transferência:");
@@ -153,13 +163,17 @@ public class Main {
 
             if (resultado == ResultadoTransferencia.SUCESSO) {
                 System.out.println("Transferência realizada com sucesso.");
-            } else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
+            } 
+            else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
                 System.out.println("Conta de origem não encontrada.");
-            } else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
+            } 
+            else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
                 System.out.println("Conta de destino não encontrada.");
-            } else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
+            } 
+            else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
                 System.out.println("Valor de transferência inválido.");
-            } else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
+            } 
+            else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
                 System.out.println("Saldo insuficiente.");
             }
         }
@@ -168,19 +182,22 @@ public class Main {
     public static void gerarExtrato(Scanner scanner, Banco banco) {
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
-        } else {
+        } 
+        else {
             int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
             Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
             if (contaEncontrada != null) {
                 if (contaEncontrada.getExtrato().isEmpty()) {
                     System.out.println("Nenhuma operação realizada.");
-                } else {
+                } 
+                else {
                     for (String linha : contaEncontrada.getExtrato()) {
                         System.out.println(linha);
                     }
                 }
-            } else {
+            } 
+            else {
                 System.out.println("Conta não encontrada.");
             }
         }
@@ -192,72 +209,14 @@ public class Main {
 
         if (contaEncontrada != null) {
             mostrarDadosConta(contaEncontrada);
-        } else {
+        } 
+        else {
             System.out.println("Conta não encontrada.");
         }
     }
 
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
-        Banco banco = new Banco();
-        boolean continuar = true;
-
-        while (continuar) {
-            mostrarMenu();
-            int opcao = lerInteiro(scanner, "Escolha uma opcao:");
-            switch (opcao) {
-                case 0: {
-                    System.out.println("Saindo...");
-                    continuar = false;
-                    break;
-                }
-
-                case 1: {
-                    criarConta(scanner, banco);
-                    break;
-                }
-
-                case 2: {
-                    depositar(scanner, banco);
-                    break;
-                }
-
-                case 3: {
-                    sacar(scanner, banco);
-                    break;
-                }
-
-                case 4: {
-                    consultarSaldo(scanner, banco);
-                    break;
-                }
-
-                case 5: {
-                    listarContas(banco);
-                    break;
-                }
-
-                case 6: {
-                    buscarConta(scanner, banco);
-                    break;
-                }
-
-                case 7: {
-                    transferir(scanner, banco);
-                    break;
-                }
-
-                case 8: {
-                    gerarExtrato(scanner, banco);
-                    break;
-                }
-
-                default: {
-                    System.out.println("Opção inválida.");
-                    break;
-                }
-            }
-        }
-        scanner.close();
+        AplicacaoBancaria app = new AplicacaoBancaria();
+        app.executar();
     }
 }
