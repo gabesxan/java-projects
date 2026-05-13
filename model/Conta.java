@@ -8,7 +8,7 @@ public class Conta {
     private String titular;
     private double saldo;
     private int numero;
-    
+
     public Conta(int numero, String titularInicial) {
         this.numero = numero;
         titular = titularInicial;
@@ -16,11 +16,11 @@ public class Conta {
         extrato = new ArrayList<>();
     }
 
-    public ArrayList<String> getExtrato(){
+    public ArrayList<String> getExtrato() {
         return new ArrayList<>(extrato);
     }
 
-    public int getNumero(){
+    public int getNumero() {
         return numero;
     }
 
@@ -34,7 +34,7 @@ public class Conta {
 
     public void registrarOperacao(TipoOperacao tipo, double valor, String descricao) {
         LocalDateTime agora = LocalDateTime.now();
-    extrato.add(agora + " - " + tipo + " - R$ " + valor + " - " + descricao);
+        extrato.add(agora + " - " + tipo + " - R$ " + valor + " - " + descricao);
     }
 
     public boolean depositar(double valor) {
@@ -58,11 +58,11 @@ public class Conta {
         saldo = saldo + valor;
         return true;
     }
-    
+
     public boolean debitarSemExtrato(double valor) {
         if (valor <= 0) {
             return false;
-            
+
         }
         if (saldo >= valor) {
             saldo = saldo - valor;
@@ -70,11 +70,12 @@ public class Conta {
         }
         return false;
     }
+
     public boolean sacar(double valor) {
         if (valor <= 0) {
-            return false;      
+            return false;
         }
-        
+
         if (saldo >= valor) {
             saldo = saldo - valor;
             registrarOperacao(TipoOperacao.SAQUE, valor, "Saque realizado");

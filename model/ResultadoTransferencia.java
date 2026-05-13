@@ -1,4 +1,5 @@
 package model;
+
 public enum ResultadoTransferencia {
     SUCESSO,
     CONTA_ORIGEM_NAO_ENCONTRADA,

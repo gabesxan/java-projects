@@ -250,7 +250,7 @@ public class Main {
                     transferir(scanner, banco);
                     break;
                 }
-                
+
                 case 8: {
                     gerarExtrato(scanner, banco);
                     break;

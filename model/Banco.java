@@ -60,16 +60,14 @@ public class Banco {
         destino.creditarSemExtrato(valor);
 
         origem.registrarOperacao(
-            TipoOperacao.TRANSFERENCIA_ENVIADA,
-            valor,
-            "Para conta " + destino.getNumero()
-        );
+                TipoOperacao.TRANSFERENCIA_ENVIADA,
+                valor,
+                "Para conta " + destino.getNumero());
 
         destino.registrarOperacao(
-            TipoOperacao.TRANSFERENCIA_RECEBIDA,
-            valor,
-            "Da conta " + origem.getNumero()
-        );
+                TipoOperacao.TRANSFERENCIA_RECEBIDA,
+                valor,
+                "Da conta " + origem.getNumero());
 
         return ResultadoTransferencia.SUCESSO;
     }
