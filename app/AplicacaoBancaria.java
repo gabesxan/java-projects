@@ -234,16 +234,26 @@ public class AplicacaoBancaria {
 
             ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
 
-            if (resultado == ResultadoTransferencia.SUCESSO) {
-                System.out.println("Transferência realizada com sucesso.");
-            } else if (resultado == ResultadoTransferencia.CONTA_ORIGEM_NAO_ENCONTRADA) {
-                System.out.println("Conta de origem não encontrada.");
-            } else if (resultado == ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA) {
-                System.out.println("Conta de destino não encontrada.");
-            } else if (resultado == ResultadoTransferencia.VALOR_INVALIDO) {
-                System.out.println("Valor de transferência inválido.");
-            } else if (resultado == ResultadoTransferencia.SALDO_INSUFICIENTE) {
-                System.out.println("Saldo insuficiente.");
+            switch (resultado) {
+                case SUCESSO:
+                    System.out.println("Transferência realizada com sucesso.");
+                    break;
+
+                case CONTA_ORIGEM_NAO_ENCONTRADA:
+                    System.out.println("Conta de origem não encontrada.");
+                    break;
+
+                case CONTA_DESTINO_NAO_ENCONTRADA:
+                    System.out.println("Conta de destino não encontrada.");
+                    break;
+
+                case VALOR_INVALIDO:
+                    System.out.println("Valor de transferência inválido.");
+                    break;
+
+                case SALDO_INSUFICIENTE:
+                    System.out.println("Saldo insuficiente.");
+                    break;
             }
         }
     }
@@ -268,6 +278,4 @@ public class AplicacaoBancaria {
             }
         }
     }
-
 }
-
