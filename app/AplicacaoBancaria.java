@@ -21,58 +21,20 @@ public class AplicacaoBancaria {
         while (continuar) {
             mostrarMenu();
             int opcao = lerInteiro("Escolha uma opção:");
-
             switch (opcao) {
-                case 0: {
+                case 0 -> {
                     System.out.println("Saindo...");
                     continuar = false;
-                    break;
                 }
-
-                case 1: {
-                    criarConta();
-                    break;
-                }
-
-                case 2: {
-                    depositar();
-                    break;
-                }
-
-                case 3: {
-                    sacar();
-                    break;
-                }
-
-                case 4: {
-                    consultarSaldo();
-                    break;
-                }
-
-                case 5: {
-                    listarContas();
-                    break;
-                }
-
-                case 6: {
-                    buscarConta();
-                    break;
-                }
-
-                case 7: {
-                    transferir();
-                    break;
-                }
-
-                case 8: {
-                    gerarExtrato();
-                    break;
-                }
-
-                default: {
-                    System.out.println("Opção inválida.");
-                    break;
-                }
+                case 1 -> criarConta();
+                case 2 -> depositar();
+                case 3 -> sacar();
+                case 4 -> consultarSaldo();
+                case 5 -> listarContas();
+                case 6 -> buscarConta();
+                case 7 -> transferir();
+                case 8 -> gerarExtrato();
+                default -> System.out.println("Opção inválida.");
             }
         }
     }
@@ -233,26 +195,13 @@ public class AplicacaoBancaria {
             ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
 
             switch (resultado) {
-                case SUCESSO:
-                    System.out.println("Transferência realizada com sucesso.");
-                    break;
-
-                case CONTA_ORIGEM_NAO_ENCONTRADA:
-                    System.out.println("Conta de origem não encontrada.");
-                    break;
-
-                case CONTA_DESTINO_NAO_ENCONTRADA:
-                    System.out.println("Conta de destino não encontrada.");
-                    break;
-
-                case VALOR_INVALIDO:
-                    System.out.println("Valor de transferência inválido.");
-                    break;
-
-                case SALDO_INSUFICIENTE:
-                    System.out.println("Saldo insuficiente.");
-                    break;
+                case SUCESSO -> System.out.println("Transferência realizada com sucesso.");
+                case CONTA_ORIGEM_NAO_ENCONTRADA -> System.out.println("Conta de origem não encontrada.");
+                case CONTA_DESTINO_NAO_ENCONTRADA -> System.out.println("Conta de destino não encontrada.");
+                case VALOR_INVALIDO -> System.out.println("Valor de transferência inválido.");
+                case SALDO_INSUFICIENTE -> System.out.println("Saldo insuficiente.");
             }
+
         }
     }
 
