@@ -1,6 +1,7 @@
 package model;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class Transacao {
     private final TipoOperacao tipo;
@@ -16,7 +17,9 @@ public class Transacao {
     }
 
     public String formatarParaExtrato() {
-        return dataHora + " - " + tipo + " - R$ " + valor + " - " + descricao;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+        String dataFormatada = dataHora.format(formatter);
+        return dataFormatada + " - " + tipo + " - R$ " + valor + " - " + descricao;
     }
 
     public TipoOperacao getTipo() {
