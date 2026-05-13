@@ -46,6 +46,10 @@ public class Banco {
         if (destino == null) {
             return ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA;
         }
+        
+        if (numeroOrigem == numeroDestino) {
+            return ResultadoTransferencia.CONTAS_IGUAIS;
+        }
 
         if (valor <= 0) {
             return ResultadoTransferencia.VALOR_INVALIDO;
