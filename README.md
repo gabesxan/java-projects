@@ -1,4 +1,4 @@
-# Projeto Banco
+# Simulador de Conta Bancária em Java
 
 Simulador de conta bancária desenvolvido em Java puro, com execução pelo terminal. O projeto foi criado para praticar fundamentos da linguagem Java por meio de um sistema bancário simples, sem Spring Boot, sem banco de dados e sem interface gráfica.
 
@@ -12,6 +12,15 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 - Buscar conta por número
 - Transferir entre contas
 - Gerar extrato de operações
+
+## Organização da aplicação
+
+- `app.Main`: ponto de entrada do programa.
+- `app.AplicacaoBancaria`: concentra o menu, a leitura de dados pelo terminal e a interação com o usuário.
+- `model.Banco`: gerencia o cadastro, a busca, a listagem e as transferências entre contas.
+- `model.Conta`: representa uma conta bancária, incluindo saldo, titular e extrato.
+- `model.TipoOperacao`: enum usado para classificar operações no extrato.
+- `model.ResultadoTransferencia`: enum usado para representar o resultado de uma tentativa de transferência.
 
 ## Regras principais
 
@@ -44,9 +53,10 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 
 ## Atualizações realizadas
 
+- Separada a classe `AplicacaoBancaria` para concentrar o menu e a interação com o usuário, deixando `Main` apenas como ponto de entrada.
 - Adicionada a classe `Banco` para centralizar o cadastro, a busca e a listagem de contas.
 - Implementada validação para evitar contas duplicadas pelo mesmo número.
-- Movida a regra de transferência para a classe `Banco`, mantendo a classe `Main` focada no menu e na interação com o usuário.
+- Movida a regra de transferência para a classe `Banco`, mantendo a camada de aplicação focada no menu e na interação com o usuário.
 - Criado o enum `ResultadoTransferencia` para representar os possíveis resultados de uma transferência.
 - Implementadas transferências entre contas com validação de origem, destino, valor e saldo.
 - Registradas transferências no extrato da conta de origem e da conta de destino.
@@ -67,7 +77,7 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 Na raiz do projeto, compile os arquivos Java:
 
 ```bash
-javac -d out app/Main.java model/Banco.java model/Conta.java model/ResultadoTransferencia.java model/TipoOperacao.java
+javac -d out app/*.java model/*.java
 ```
 
 Depois execute a classe principal:
@@ -81,6 +91,7 @@ java -cp out app.Main
 ```text
 .
 ├── app
+│   ├── AplicacaoBancaria.java
 │   └── Main.java
 ├── model
 │   ├── Banco.java
