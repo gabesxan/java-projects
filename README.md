@@ -1,6 +1,8 @@
 # Simulador de Conta Bancária em Java
 
-Simulador de conta bancária desenvolvido em Java puro, com execução pelo terminal. O projeto foi criado para praticar fundamentos da linguagem Java por meio de um sistema bancário simples, sem Spring Boot, sem banco de dados e sem interface gráfica.
+Simulador de conta bancária desenvolvido em Java puro, com execução pelo terminal. O projeto tem objetivo educacional e foi construído para praticar programação orientada a objetos, encapsulamento, separação de responsabilidades e refatoração gradual.
+
+O projeto não usa Spring Boot, banco de dados, API web ou interface gráfica. Toda a interação acontece pelo terminal.
 
 ## Funcionalidades
 
@@ -15,12 +17,27 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 
 ## Organização da aplicação
 
-- `app.Main`: ponto de entrada do programa.
-- `app.AplicacaoBancaria`: concentra o menu, a leitura de dados pelo terminal e a interação com o usuário.
-- `model.Banco`: gerencia o cadastro, a busca, a listagem e as transferências entre contas.
-- `model.Conta`: representa uma conta bancária, incluindo saldo, titular e extrato.
-- `model.TipoOperacao`: enum usado para classificar operações no extrato.
-- `model.ResultadoTransferencia`: enum usado para representar o resultado de uma tentativa de transferência.
+A aplicação foi dividida em pacotes para separar melhor as responsabilidades:
+
+- `app.Main`: ponto de entrada do programa. Essa classe apenas cria uma instância de `AplicacaoBancaria` e chama o método `executar()`.
+- `app.AplicacaoBancaria`: controla o menu, a entrada de dados do usuário e o fluxo da aplicação no terminal. Ela conversa com o `Banco` para executar as operações escolhidas.
+- `model.Banco`: gerencia a lista de contas, busca contas por número, informa se há contas cadastradas e coordena transferências entre contas.
+- `model.Conta`: representa uma conta individual. Guarda número, titular, saldo e extrato. Também contém as operações próprias de uma conta, como depositar, sacar e registrar movimentações.
+- `model.Transacao`: representa cada item do extrato. Guarda o tipo da operação, valor, data/hora e descrição, além de formatar a saída exibida no terminal.
+- `model.TipoOperacao`: define os tipos de operação registrados no extrato, como depósito, saque e transferências. Cada tipo possui uma descrição amigável para exibição.
+- `model.ResultadoTransferencia`: representa os possíveis resultados de uma tentativa de transferência, como sucesso, conta não encontrada, valor inválido ou saldo insuficiente.
+
+## Como o código foi construído
+
+O projeto foi melhorado aos poucos por meio de refatorações:
+
+- No início, a maior parte da lógica estava concentrada no `Main`.
+- Depois, foi criada a classe `Banco` para separar o gerenciamento das contas.
+- Em seguida, o fluxo do terminal foi movido para `AplicacaoBancaria`, deixando o `Main` apenas como inicializador.
+- A transferência passou a retornar um `ResultadoTransferencia`, evitando depender apenas de mensagens soltas ou valores booleanos.
+- O extrato deixou de ser uma lista de `String` e passou a usar objetos `Transacao`, deixando cada movimentação mais organizada.
+- As listas internas retornam cópias, como em `listarContas()` e `getExtrato()`, para proteger o encapsulamento.
+- Alguns campos foram marcados como `final` porque recebem valor no construtor e não precisam mudar depois, como número da conta, titular e lista de transações.
 
 ## Regras principais
 
@@ -33,39 +50,21 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 ## Conceitos praticados
 
 - Sintaxe básica Java
-- `Scanner`
-- `while`
-- `switch`
-- `if/else`
-- Métodos
-- Classes e objetos
-- Construtores
-- Encapsulamento
-- Getters
-- `ArrayList`
-- `for-each`
-- Tratamento de erros com `try/catch`
-- `enum`
-- `LocalDateTime`
-- Retorno defensivo de listas
-- Organização em pacotes
-- Separação de responsabilidades entre menu, banco e conta
-
-## Atualizações realizadas
-
-- Separada a classe `AplicacaoBancaria` para concentrar o menu e a interação com o usuário, deixando `Main` apenas como ponto de entrada.
-- Adicionada a classe `Banco` para centralizar o cadastro, a busca e a listagem de contas.
-- Implementada validação para evitar contas duplicadas pelo mesmo número.
-- Movida a regra de transferência para a classe `Banco`, mantendo a camada de aplicação focada no menu e na interação com o usuário.
-- Criado o enum `ResultadoTransferencia` para representar os possíveis resultados de uma transferência.
-- Implementadas transferências entre contas com validação de origem, destino, valor e saldo.
-- Registradas transferências no extrato da conta de origem e da conta de destino.
-- Adicionado histórico de operações com `LocalDateTime` e `TipoOperacao`.
-- Criado método auxiliar para exibir os dados de uma conta.
-- Ajustado `listarContas()` para retornar uma cópia da lista de contas.
-- Ajustado `getExtrato()` para retornar uma cópia do histórico da conta.
-- Melhorado o tratamento de entradas inválidas para números inteiros e valores monetários.
-- Atualizada a documentação do projeto com estrutura e comando de compilação corretos.
+- Aplicação de terminal com `Scanner`
+- Estruturas de decisão com `if/else` e `switch`
+- Estruturas de repetição com `while` e `for-each`
+- Métodos e organização de comportamento
+- Classes, objetos e construtores
+- Encapsulamento com atributos privados e getters
+- Separação de responsabilidades entre `Main`, aplicação, banco e conta
+- Uso de `ArrayList`
+- Uso de `enum` para representar tipos e resultados
+- Registro de data e hora com `LocalDateTime`
+- Formatação de informações para exibição no terminal
+- Tratamento de entradas inválidas com `try/catch`
+- Retorno defensivo de listas para proteger dados internos
+- Uso de `final` em campos que não mudam depois da construção do objeto
+- Organização do código em pacotes
 
 ## Requisitos
 
@@ -77,7 +76,7 @@ Simulador de conta bancária desenvolvido em Java puro, com execução pelo term
 Na raiz do projeto, compile os arquivos Java:
 
 ```bash
-javac -d out app/*.java model/*.java
+javac -d out app/Main.java app/AplicacaoBancaria.java model/Conta.java model/Banco.java model/Transacao.java model/TipoOperacao.java model/ResultadoTransferencia.java
 ```
 
 Depois execute a classe principal:
@@ -97,10 +96,11 @@ java -cp out app.Main
 │   ├── Banco.java
 │   ├── Conta.java
 │   ├── ResultadoTransferencia.java
-│   └── TipoOperacao.java
+│   ├── TipoOperacao.java
+│   └── Transacao.java
 └── README.md
 ```
 
 ## Observação
 
-Este é um projeto educacional, criado para praticar conceitos fundamentais de Java. Ele pode evoluir futuramente com novas funcionalidades, melhorias de organização e persistência de dados.
+Este é um projeto educacional, criado para praticar conceitos fundamentais de Java. A ideia principal é entender como dividir responsabilidades entre classes e evoluir o código gradualmente sem tornar o `Main` responsável por tudo.
