@@ -119,7 +119,16 @@ public class Main{
             }
         }
     }
+    public static void consultarSaldo(Scanner scanner, Banco banco) {
+        int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
+        Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
 
+        if (contaEncontrada != null) {
+            mostrarDadosConta(contaEncontrada);
+        } else {
+            System.out.println("Conta não encontrada.");
+        }
+    }
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
         Banco banco = new Banco();
@@ -150,18 +159,8 @@ public class Main{
                     break;
                 }
 
-                case 4:{
-                int numeroBuscado = lerInteiro(scanner, "Qual o número da conta?");
-                Conta contaEncontrada = banco.buscarContaPorNumero(numeroBuscado);
-
-            
-                        if (contaEncontrada != null) {
-                        mostrarDadosConta(contaEncontrada);
-                        } 
-                        else {
-                        System.out.println("Conta não encontrada.");
-                    }
-
+                case 4:{       
+                    consultarSaldo(scanner, banco);
                     break;
                 }
                 
