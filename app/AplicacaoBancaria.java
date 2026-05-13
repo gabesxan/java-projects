@@ -5,6 +5,7 @@ import java.util.Scanner;
 import model.Banco;
 import model.Conta;
 import model.ResultadoTransferencia;
+import model.Transacao;
 
 public class AplicacaoBancaria {
     private final Scanner scanner;
@@ -222,8 +223,8 @@ public class AplicacaoBancaria {
                 if (contaEncontrada.getExtrato().isEmpty()) {
                     System.out.println("Nenhuma operação realizada.");
                 } else {
-                    for (String linha : contaEncontrada.getExtrato()) {
-                        System.out.println(linha);
+                    for (Transacao transacao : contaEncontrada.getExtrato()) {
+                        System.out.println(transacao.formatarParaExtrato());
                     }
                 }
             } else {

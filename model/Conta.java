@@ -1,10 +1,9 @@
 package model;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 public class Conta {
-    private final ArrayList<String> extrato;
+    private final ArrayList<Transacao> extrato;
     private final String titular;
     private double saldo;
     private final int numero;
@@ -16,7 +15,7 @@ public class Conta {
         extrato = new ArrayList<>();
     }
 
-    public ArrayList<String> getExtrato() {
+    public ArrayList<Transacao> getExtrato() {
         return new ArrayList<>(extrato);
     }
 
@@ -33,8 +32,8 @@ public class Conta {
     }
 
     public void registrarOperacao(TipoOperacao tipo, double valor, String descricao) {
-        LocalDateTime agora = LocalDateTime.now();
-        extrato.add(agora + " - " + tipo + " - R$ " + valor + " - " + descricao);
+        Transacao transacao = new Transacao(tipo, valor, descricao);
+        extrato.add(transacao);
     }
 
     public boolean depositar(double valor) {
@@ -45,10 +44,6 @@ public class Conta {
         saldo = saldo + valor;
         registrarOperacao(TipoOperacao.DEPOSITO, valor, "Depósito realizado");
         return true;
-    }
-
-    public void adicionarAoExtrato(String mensagem) {
-        extrato.add(mensagem);
     }
 
     public boolean creditarSemExtrato(double valor) {
