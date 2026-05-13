@@ -7,8 +7,8 @@ import model.Conta;
 import model.ResultadoTransferencia;
 
 public class AplicacaoBancaria {
-    private Scanner scanner;
-    private Banco banco;
+    private final Scanner scanner;
+    private final Banco banco;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
@@ -268,4 +268,6 @@ public class AplicacaoBancaria {
             }
         }
     }
+
 }
+
