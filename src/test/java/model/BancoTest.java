@@ -1,8 +1,10 @@
 package model;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class BancoTest {
@@ -121,5 +123,37 @@ class BancoTest {
 
         assertEquals(TipoOperacao.TRANSFERENCIA_ENVIADA, origem.getExtrato().get(1).getTipo());
         assertEquals(TipoOperacao.TRANSFERENCIA_RECEBIDA, destino.getExtrato().get(0).getTipo());
+
+    }
+
+    @Test
+    void naoDeveTransferirValorInvalido() {
+        Banco banco = new Banco();
+        Conta origem = new Conta(1, "Origem");
+        Conta destino = new Conta(2, "Destino");
+
+        origem.depositar(100);
+        banco.adicionarConta(origem);
+        banco.adicionarConta(destino);
+
+        ResultadoTransferencia resultado = banco.transferir(1, 2, -30);
+
+        assertEquals(ResultadoTransferencia.VALOR_INVALIDO, resultado);
+        assertEquals(100, origem.getSaldo());
+        assertEquals(0, destino.getSaldo());
+    }
+
+    @Test
+    void naoDeveAdicionarContaComNumeroRepetido() {
+        Banco banco = new Banco();
+        Conta primeira = new Conta(1, "Gabriel");
+        Conta segunda = new Conta(1, "Maria");
+
+        boolean primeiraAdicionada = banco.adicionarConta(primeira);
+        boolean segundaAdicionada = banco.adicionarConta(segunda);
+
+        assertTrue(primeiraAdicionada);
+        assertFalse(segundaAdicionada);
+        assertEquals(1, banco.quantidadeDeContas());
     }
 }

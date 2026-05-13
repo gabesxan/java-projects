@@ -19,8 +19,13 @@ public class Banco {
         return null;
     }
 
-    public void adicionarConta(Conta conta) {
+    public boolean adicionarConta(Conta conta) {
+        if (buscarContaPorNumero(conta.getNumero()) != null) {
+            return false;
+        }
+
         contas.add(conta);
+        return true;
     }
 
     public boolean estaVazio() {
@@ -46,7 +51,7 @@ public class Banco {
         if (destino == null) {
             return ResultadoTransferencia.CONTA_DESTINO_NAO_ENCONTRADA;
         }
-        
+
         if (numeroOrigem == numeroDestino) {
             return ResultadoTransferencia.CONTAS_IGUAIS;
         }

@@ -2,6 +2,7 @@ package app;
 
 import java.util.InputMismatchException;
 import java.util.Scanner;
+
 import model.Banco;
 import model.Conta;
 import model.ResultadoTransferencia;
@@ -85,10 +86,14 @@ public class AplicacaoBancaria {
             String nomeDigitado = scanner.nextLine();
 
             Conta novaConta = new Conta(numeroDigitado, nomeDigitado);
-            banco.adicionarConta(novaConta);
+            boolean contaAdicionada = banco.adicionarConta(novaConta);
 
-            System.out.println("Conta criada para: " + novaConta.getTitular());
-            System.out.println("Número da conta: " + novaConta.getNumero());
+            if (contaAdicionada) {
+                System.out.println("Conta criada para: " + novaConta.getTitular());
+                System.out.println("Número da conta: " + novaConta.getNumero());
+            } else {
+                System.out.println("Já existe uma conta com esse número.");
+            }
         }
     }
 
