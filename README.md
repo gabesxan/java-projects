@@ -39,6 +39,13 @@ O projeto foi melhorado aos poucos por meio de refatorações:
 - As listas internas retornam cópias, como em `listarContas()` e `getExtrato()`, para proteger o encapsulamento.
 - Alguns campos foram marcados como `final` porque recebem valor no construtor e não precisam mudar depois, como número da conta, titular e lista de transações.
 
+## Atualizações recentes
+
+- README atualizado para refletir a estrutura atual do projeto.
+- Documentação reorganizada para explicar melhor o papel de `Main`, `AplicacaoBancaria`, `Banco`, `Conta`, `Transacao`, `TipoOperacao` e `ResultadoTransferencia`.
+- Comando de compilação atualizado para listar explicitamente todos os arquivos Java do projeto.
+- Seção de conceitos praticados revisada com foco em POO, encapsulamento, enums, extrato com objetos e separação de responsabilidades.
+
 ## Regras principais
 
 - Não é permitido criar duas contas com o mesmo número.
