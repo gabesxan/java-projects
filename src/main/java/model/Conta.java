@@ -36,6 +36,10 @@ public class Conta {
         extrato.add(transacao);
     }
 
+    public void adicionarTransacao(Transacao transacao) {
+        extrato.add(transacao);
+    }
+
     public boolean depositar(double valor) {
         if (valor <= 0) {
             return false;
@@ -70,7 +74,7 @@ public class Conta {
         if (valor <= 0) {
             return false;
         }
-        
+
         if (saldo >= valor) {
             saldo = saldo - valor;
             registrarOperacao(TipoOperacao.SAQUE, valor, "Saque realizado");

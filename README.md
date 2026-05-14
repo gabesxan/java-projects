@@ -14,6 +14,7 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 - Transferir valores entre contas.
 - Gerar extrato com historico de operacoes.
 - Salvar e carregar contas em arquivo CSV.
+- Salvar e carregar transacoes do extrato em arquivo CSV.
 
 ## Tecnologias
 
@@ -29,7 +30,8 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 ├── pom.xml
 ├── README.md
 ├── data
-│   └── contas.csv
+│   ├── contas.csv
+│   └── transacoes.csv
 └── src
     ├── main
     │   └── java
@@ -43,7 +45,8 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
     │       │   ├── TipoOperacao.java
     │       │   └── Transacao.java
     │       └── persistence
-    │           └── ContaRepository.java
+    │           ├── ContaRepository.java
+    │           └── TransacaoRepository.java
     └── test
         └── java
             ├── model
@@ -53,12 +56,13 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
             │   ├── TipoOperacaoTest.java
             │   └── TransacaoTest.java
             └── persistence
-                └── ContaRepositoryTest.java
+                ├── ContaRepositoryTest.java
+                └── TransacaoRepositoryTest.java
 ```
 
 A pasta `target/` e gerada automaticamente pelo Maven durante compilacao e testes. Ela nao faz parte do codigo-fonte.
 
-A pasta `data/` guarda o arquivo `contas.csv`, usado pela aplicacao para manter as contas entre execucoes.
+A pasta `data/` guarda os arquivos `contas.csv` e `transacoes.csv`, usados pela aplicacao para manter contas e extratos entre execucoes.
 
 ## Organizacao da aplicacao
 
@@ -70,12 +74,15 @@ A pasta `data/` guarda o arquivo `contas.csv`, usado pela aplicacao para manter 
 - `model.TipoOperacao`: enum com os tipos de operacao registrados no extrato.
 - `model.ResultadoTransferencia`: enum com os possiveis resultados de uma transferencia.
 - `persistence.ContaRepository`: salva e carrega as contas no arquivo `data/contas.csv`.
+- `persistence.TransacaoRepository`: salva e carrega as transacoes do extrato no arquivo `data/transacoes.csv`.
 
 ## Persistencia de dados
 
-Ao iniciar, a aplicacao tenta carregar as contas salvas em `data/contas.csv`. Durante o uso, o arquivo e atualizado quando uma conta e criada, quando um deposito ou saque valido e realizado e quando uma transferencia e concluida com sucesso.
+Ao iniciar, a aplicacao tenta carregar as contas salvas em `data/contas.csv` e as transacoes salvas em `data/transacoes.csv`. Durante o uso, os arquivos sao atualizados quando uma conta e criada, quando um deposito ou saque valido e realizado e quando uma transferencia e concluida com sucesso.
 
-O arquivo usa o formato CSV separado por ponto e virgula:
+Os arquivos usam o formato CSV separado por ponto e virgula.
+
+Formato de `contas.csv`:
 
 ```text
 numero;titular;saldo
@@ -87,7 +94,19 @@ Exemplo:
 1;Gabriel;150.0
 ```
 
-A persistencia atual guarda numero da conta, titular e saldo. O historico do extrato continua sendo registrado em memoria durante a execucao atual da aplicacao.
+Formato de `transacoes.csv`:
+
+```text
+numeroConta;tipo;valor;dataHora;descricao
+```
+
+Exemplo:
+
+```text
+1;DEPOSITO;150.0;2026-05-14T10:30;Deposito realizado
+```
+
+A persistencia atual guarda numero da conta, titular e saldo, alem do historico do extrato (tipo, valor, data/hora e descricao) associado a cada conta.
 
 ## Regras de negocio
 
@@ -126,7 +145,7 @@ mvn test
 Resultado da ultima execucao local:
 
 ```text
-Tests run: 36, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 39, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -138,6 +157,7 @@ Classes de teste atuais:
 - `TipoOperacaoTest`: valida as descricoes amigaveis dos tipos de operacao.
 - `ResultadoTransferenciaTest`: valida os valores esperados do enum de resultados de transferencia.
 - `ContaRepositoryTest`: valida salvamento, carregamento e retorno de lista vazia quando o arquivo ainda nao existe.
+- `TransacaoRepositoryTest`: valida salvamento e carregamento de transacoes em arquivo CSV.
 
 Cobertura comportamental principal:
 
@@ -152,6 +172,7 @@ Cobertura comportamental principal:
 - Transacoes mantem tipo, valor, descricao, data/hora e formato de exibicao.
 - Enums de operacao e de resultado de transferencia mantem os valores esperados.
 - Repositorio de contas grava o arquivo CSV e carrega as contas salvas.
+- Repositorio de transacoes grava o arquivo CSV e recarrega o extrato por conta.
 
 ## Checklist de testes manuais
 

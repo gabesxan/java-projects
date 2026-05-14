@@ -10,10 +10,14 @@ public class Transacao {
     private final String descricao;
 
     public Transacao(TipoOperacao tipo, double valor, String descricao) {
+        this(tipo, valor, LocalDateTime.now(), descricao);
+    }
+       
+    public Transacao(TipoOperacao tipo, double valor, LocalDateTime dataHora, String descricao) {
         this.tipo = tipo;
         this.valor = valor;
+        this.dataHora = dataHora;
         this.descricao = descricao;
-        this.dataHora = LocalDateTime.now();
     }
 
     public String formatarParaExtrato() {

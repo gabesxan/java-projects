@@ -10,16 +10,19 @@ import model.Conta;
 import model.ResultadoTransferencia;
 import model.Transacao;
 import persistence.ContaRepository;
+import persistence.TransacaoRepository;
 
 public class AplicacaoBancaria {
     private final ContaRepository contaRepository;
     private final Scanner scanner;
     private final Banco banco;
+    private final TransacaoRepository transacaoRepository;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
         banco = new Banco();
         contaRepository = new ContaRepository(Path.of("data", "contas.csv"));
+        transacaoRepository = new TransacaoRepository(Path.of("data", "transacoes.csv"));
     }
 
     public void executar() {
@@ -118,6 +121,8 @@ public class AplicacaoBancaria {
             for (Conta conta : contaRepository.carregar()) {
                 banco.adicionarConta(conta);
             }
+
+            transacaoRepository.carregar(banco.listarContas());
         } catch (IOException e) {
             System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
         }
@@ -156,13 +161,12 @@ public class AplicacaoBancaria {
 
                 if (depositoRealizado) {
                     salvarContas();
+                    salvarTransacoes();
+
                     System.out.println("Depósito realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
-                } else {
-                    System.out.println("Valor depositado inválido.");
                 }
-            } else {
-                System.out.println("Conta não encontrada.");
+
             }
         }
     }
@@ -182,13 +186,11 @@ public class AplicacaoBancaria {
 
                 if (saqueRealizado) {
                     salvarContas();
+                    salvarTransacoes();
+
                     System.out.println("Saque realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
-                } else {
-                    System.out.println("Saque não realizado.");
                 }
-            } else {
-                System.out.println("Conta não encontrada.");
             }
         }
     }
@@ -237,6 +239,7 @@ public class AplicacaoBancaria {
             switch (resultado) {
                 case SUCESSO -> {
                     salvarContas();
+                    salvarTransacoes();
                     System.out.println("Transferência realizada com sucesso.");
                 }
                 case CONTA_ORIGEM_NAO_ENCONTRADA -> System.out.println("Conta de origem não encontrada.");
@@ -266,6 +269,14 @@ public class AplicacaoBancaria {
             } else {
                 System.out.println("Conta não encontrada.");
             }
+        }
+    }
+
+    private void salvarTransacoes() {
+        try {
+            transacaoRepository.salvar(banco.listarContas());
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar transações em arquivo.");
         }
     }
 }
