@@ -68,7 +68,7 @@ public class AplicacaoBancaria {
     }
 
     private void mostrarMenu() {
-        System.out.println("======Sistema Bancario======");
+        System.out.println("======Sistema Bancário======");
         System.out.println("1 - Criar conta");
         System.out.println("2 - Depósito");
         System.out.println("3 - Saque");
@@ -147,7 +147,7 @@ public class AplicacaoBancaria {
     }
 
     private void depositar() {
-        System.out.println("Depósito foi selecionado");
+        System.out.println("Depósito selecionado.");
 
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
@@ -165,14 +165,17 @@ public class AplicacaoBancaria {
 
                     System.out.println("Depósito realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
+                } else {
+                    System.out.println("Valor depositado inválido.");
                 }
-
+            } else {
+                System.out.println("Conta não encontrada.");
             }
         }
     }
 
     private void sacar() {
-        System.out.println("Saque foi selecionado.");
+        System.out.println("Saque selecionado.");
 
         if (banco.estaVazio()) {
             System.out.println("Nenhuma conta cadastrada.");
@@ -190,7 +193,11 @@ public class AplicacaoBancaria {
 
                     System.out.println("Saque realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
+                } else {
+                    System.out.println("Saque não realizado. Verifique se o valor é válido e se há saldo suficiente.");
                 }
+            } else {
+                System.out.println("Conta não encontrada.");
             }
         }
     }
@@ -212,7 +219,7 @@ public class AplicacaoBancaria {
 
     private void listarContas() {
         if (banco.estaVazio()) {
-            System.out.println("Sem nenhuma conta cadastrada");
+            System.out.println("Nenhuma conta cadastrada.");
         } else {
             for (Conta c : banco.listarContas()) {
                 mostrarDadosConta(c);
@@ -225,7 +232,7 @@ public class AplicacaoBancaria {
     }
 
     private void transferir() {
-        System.out.println("Transferência foi selecionada.");
+        System.out.println("Transferência selecionada.");
 
         if (banco.quantidadeDeContas() < 2) {
             System.out.println("Não é possível fazer uma transferência.");
@@ -240,12 +247,31 @@ public class AplicacaoBancaria {
                 case SUCESSO -> {
                     salvarContas();
                     salvarTransacoes();
+
+                    Conta origem = banco.buscarContaPorNumero(numeroOrigem);
+                    Conta destino = banco.buscarContaPorNumero(numeroDestino);
+
                     System.out.println("Transferência realizada com sucesso.");
+
+                    if (origem != null) {
+                        System.out.println("Origem:");
+                        mostrarDadosConta(origem);
+                    }
+
+                    if (destino != null) {
+                        System.out.println("Destino:");
+                        mostrarDadosConta(destino);
+                    }
                 }
+
                 case CONTA_ORIGEM_NAO_ENCONTRADA -> System.out.println("Conta de origem não encontrada.");
+
                 case CONTA_DESTINO_NAO_ENCONTRADA -> System.out.println("Conta de destino não encontrada.");
+
                 case VALOR_INVALIDO -> System.out.println("Valor de transferência inválido.");
+
                 case SALDO_INSUFICIENTE -> System.out.println("Saldo insuficiente.");
+
                 case CONTAS_IGUAIS -> System.out.println("A conta de origem e destino devem ser diferentes.");
             }
         }
