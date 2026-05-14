@@ -156,4 +156,23 @@ class BancoTest {
         assertFalse(segundaAdicionada);
         assertEquals(1, banco.quantidadeDeContas());
     }
+
+    @Test
+    void transferenciaParaMesmaContaDevePreservarExtrato() {
+        Banco banco = new Banco();
+        Conta conta = new Conta(1, "Gabriel");
+
+        conta.depositar(100);
+        int quantidadeExtratoAntes = conta.getExtrato().size();
+
+        banco.adicionarConta(conta);
+
+        ResultadoTransferencia resultado = banco.transferir(1, 1, 50);
+
+        int quantidadeExtratoDepois = conta.getExtrato().size();
+
+        assertEquals(ResultadoTransferencia.CONTAS_IGUAIS, resultado);
+        assertEquals(quantidadeExtratoAntes, quantidadeExtratoDepois);
+    }
+
 }
