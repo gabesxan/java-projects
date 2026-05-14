@@ -98,7 +98,7 @@ mvn test
 Resultado da ultima execucao local:
 
 ```text
-Tests run: 30, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -119,7 +119,9 @@ Cobertura comportamental principal:
 - Busca de conta retorna a conta correta ou `null` quando inexistente.
 - Transferencia valida debita a origem, credita o destino e registra extrato nas duas contas.
 - Transferencias invalidas retornam o resultado adequado e preservam os saldos.
+- Transferencia para a mesma conta preserva o extrato.
 - Transacoes mantem tipo, valor, descricao, data/hora e formato de exibicao.
+- Enums de operacao e de resultado de transferencia mantem os valores esperados.
 
 ## Checklist de testes manuais
 
