@@ -1,5 +1,7 @@
 package app;
 
+import java.io.IOException;
+import java.nio.file.Path;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -7,19 +9,22 @@ import model.Banco;
 import model.Conta;
 import model.ResultadoTransferencia;
 import model.Transacao;
+import persistence.ContaRepository;
 
 public class AplicacaoBancaria {
+    private final ContaRepository contaRepository;
     private final Scanner scanner;
     private final Banco banco;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
         banco = new Banco();
+        contaRepository = new ContaRepository(Path.of("data", "contas.csv"));
     }
 
     public void executar() {
         boolean continuar = true;
-
+        carregarContas();
         while (continuar) {
             mostrarMenu();
             int opcao = lerInteiro("Escolha uma opção:");
@@ -89,11 +94,32 @@ public class AplicacaoBancaria {
             boolean contaAdicionada = banco.adicionarConta(novaConta);
 
             if (contaAdicionada) {
+                salvarContas();
+
                 System.out.println("Conta criada para: " + novaConta.getTitular());
                 System.out.println("Número da conta: " + novaConta.getNumero());
+
             } else {
                 System.out.println("Já existe uma conta com esse número.");
             }
+        }
+    }
+
+    private void salvarContas() {
+        try {
+            contaRepository.salvar(banco.listarContas());
+        } catch (IOException e) {
+            System.out.println("Erro ao salvar contas em arquivo.");
+        }
+    }
+
+    private void carregarContas() {
+        try {
+            for (Conta conta : contaRepository.carregar()) {
+                banco.adicionarConta(conta);
+            }
+        } catch (IOException e) {
+            System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
         }
     }
 
@@ -129,6 +155,7 @@ public class AplicacaoBancaria {
                 boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
 
                 if (depositoRealizado) {
+                    salvarContas();
                     System.out.println("Depósito realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
                 } else {
@@ -154,6 +181,7 @@ public class AplicacaoBancaria {
                 boolean saqueRealizado = contaEncontrada.sacar(valorSaque);
 
                 if (saqueRealizado) {
+                    salvarContas();
                     System.out.println("Saque realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
                 } else {
@@ -207,7 +235,10 @@ public class AplicacaoBancaria {
             ResultadoTransferencia resultado = banco.transferir(numeroOrigem, numeroDestino, valorTransferencia);
 
             switch (resultado) {
-                case SUCESSO -> System.out.println("Transferência realizada com sucesso.");
+                case SUCESSO -> {
+                    salvarContas();
+                    System.out.println("Transferência realizada com sucesso.");
+                }
                 case CONTA_ORIGEM_NAO_ENCONTRADA -> System.out.println("Conta de origem não encontrada.");
                 case CONTA_DESTINO_NAO_ENCONTRADA -> System.out.println("Conta de destino não encontrada.");
                 case VALOR_INVALIDO -> System.out.println("Valor de transferência inválido.");

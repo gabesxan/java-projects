@@ -1,6 +1,6 @@
 # Simulador de Conta Bancaria em Java
 
-Projeto educacional de um simulador bancario feito em Java puro, executado pelo terminal e organizado com Maven. A aplicacao foi criada para praticar programacao orientada a objetos, separacao de responsabilidades, encapsulamento, enums, registro de extrato e testes automatizados com JUnit 5.
+Projeto educacional de um simulador bancario feito em Java puro, executado pelo terminal e organizado com Maven. A aplicacao foi criada para praticar programacao orientada a objetos, separacao de responsabilidades, encapsulamento, enums, registro de extrato, persistencia simples em arquivo e testes automatizados com JUnit 5.
 
 O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Toda a interacao acontece pelo terminal.
 
@@ -13,6 +13,7 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 - Buscar conta por numero.
 - Transferir valores entre contas.
 - Gerar extrato com historico de operacoes.
+- Salvar e carregar contas em arquivo CSV.
 
 ## Tecnologias
 
@@ -27,29 +28,37 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 .
 ├── pom.xml
 ├── README.md
+├── data
+│   └── contas.csv
 └── src
     ├── main
     │   └── java
     │       ├── app
     │       │   ├── AplicacaoBancaria.java
     │       │   └── Main.java
-    │       └── model
-    │           ├── Banco.java
-    │           ├── Conta.java
-    │           ├── ResultadoTransferencia.java
-    │           ├── TipoOperacao.java
-    │           └── Transacao.java
+    │       ├── model
+    │       │   ├── Banco.java
+    │       │   ├── Conta.java
+    │       │   ├── ResultadoTransferencia.java
+    │       │   ├── TipoOperacao.java
+    │       │   └── Transacao.java
+    │       └── persistence
+    │           └── ContaRepository.java
     └── test
         └── java
-            └── model
-                ├── BancoTest.java
-                ├── ContaTest.java
-                ├── ResultadoTransferenciaTest.java
-                ├── TipoOperacaoTest.java
-                └── TransacaoTest.java
+            ├── model
+            │   ├── BancoTest.java
+            │   ├── ContaTest.java
+            │   ├── ResultadoTransferenciaTest.java
+            │   ├── TipoOperacaoTest.java
+            │   └── TransacaoTest.java
+            └── persistence
+                └── ContaRepositoryTest.java
 ```
 
 A pasta `target/` e gerada automaticamente pelo Maven durante compilacao e testes. Ela nao faz parte do codigo-fonte.
+
+A pasta `data/` guarda o arquivo `contas.csv`, usado pela aplicacao para manter as contas entre execucoes.
 
 ## Organizacao da aplicacao
 
@@ -60,6 +69,25 @@ A pasta `target/` e gerada automaticamente pelo Maven durante compilacao e teste
 - `model.Transacao`: representa um item do extrato, com tipo, valor, data/hora e descricao.
 - `model.TipoOperacao`: enum com os tipos de operacao registrados no extrato.
 - `model.ResultadoTransferencia`: enum com os possiveis resultados de uma transferencia.
+- `persistence.ContaRepository`: salva e carrega as contas no arquivo `data/contas.csv`.
+
+## Persistencia de dados
+
+Ao iniciar, a aplicacao tenta carregar as contas salvas em `data/contas.csv`. Durante o uso, o arquivo e atualizado quando uma conta e criada, quando um deposito ou saque valido e realizado e quando uma transferencia e concluida com sucesso.
+
+O arquivo usa o formato CSV separado por ponto e virgula:
+
+```text
+numero;titular;saldo
+```
+
+Exemplo:
+
+```text
+1;Gabriel;150.0
+```
+
+A persistencia atual guarda numero da conta, titular e saldo. O historico do extrato continua sendo registrado em memoria durante a execucao atual da aplicacao.
 
 ## Regras de negocio
 
@@ -87,7 +115,7 @@ mvn compile exec:java -Dexec.mainClass=app.Main
 
 ## Testes automatizados
 
-Os testes ficam em `src/test/java/model`, usam JUnit 5 e sao executados pelo Maven Surefire.
+Os testes ficam em `src/test/java`, usam JUnit 5 e sao executados pelo Maven Surefire.
 
 Para rodar todos os testes:
 
@@ -98,7 +126,7 @@ mvn test
 Resultado da ultima execucao local:
 
 ```text
-Tests run: 33, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 36, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 
@@ -109,6 +137,7 @@ Classes de teste atuais:
 - `TransacaoTest`: valida criacao de transacoes, dados registrados e formatacao para extrato.
 - `TipoOperacaoTest`: valida as descricoes amigaveis dos tipos de operacao.
 - `ResultadoTransferenciaTest`: valida os valores esperados do enum de resultados de transferencia.
+- `ContaRepositoryTest`: valida salvamento, carregamento e retorno de lista vazia quando o arquivo ainda nao existe.
 
 Cobertura comportamental principal:
 
@@ -122,6 +151,7 @@ Cobertura comportamental principal:
 - Transferencia para a mesma conta preserva o extrato.
 - Transacoes mantem tipo, valor, descricao, data/hora e formato de exibicao.
 - Enums de operacao e de resultado de transferencia mantem os valores esperados.
+- Repositorio de contas grava o arquivo CSV e carrega as contas salvas.
 
 ## Checklist de testes manuais
 
@@ -141,6 +171,7 @@ Depois de executar o programa pelo terminal, use o menu para validar os principa
 - [ ] Tentar transferir com origem ou destino inexistente.
 - [ ] Tentar transferir com saldo insuficiente.
 - [ ] Gerar extrato apos deposito, saque ou transferencia.
+- [ ] Fechar e abrir a aplicacao novamente para confirmar que as contas foram carregadas.
 - [ ] Confirmar que operacoes invalidas nao alteram saldo nem extrato.
 
 ## Conceitos praticados
@@ -153,6 +184,7 @@ Depois de executar o programa pelo terminal, use o menu para validar os principa
 - Separacao entre interface de terminal, regras do banco e regras da conta.
 - Uso de `ArrayList`.
 - Uso de `enum` para tipos de operacao e resultados.
+- Persistencia simples com `Files`, `Path` e arquivo CSV.
 - Registro de data e hora com `LocalDateTime`.
 - Formatacao de dados para exibicao no terminal.
 - Tratamento de entradas invalidas com `try/catch`.
