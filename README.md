@@ -83,7 +83,14 @@ Os dados da aplicacao sao salvos em arquivos CSV dentro da pasta `data/`. Isso p
 - `data/contas.csv`: guarda os dados principais das contas bancarias.
 - `data/transacoes.csv`: guarda o historico de movimentacoes (extrato) de cada conta.
 
-Ao iniciar, a aplicacao carrega os dados desses arquivos. Quando uma conta e criada, ou quando acontece deposito, saque ou transferencia, os dados atualizados sao gravados novamente nos CSVs.
+Ao iniciar, a aplicacao carrega as contas de `data/contas.csv` e depois carrega as transacoes de `data/transacoes.csv`.
+
+Durante o uso, a aplicacao grava os arquivos novamente quando:
+
+- uma conta e criada com sucesso;
+- um deposito e realizado com sucesso;
+- um saque e realizado com sucesso;
+- uma transferencia e concluida com sucesso.
 
 Formato de `data/contas.csv`:
 
@@ -98,6 +105,8 @@ numeroConta;tipo;valor;dataHora;descricao
 ```
 
 Durante o carregamento, linhas invalidas sao ignoradas.
+
+No carregamento de transacoes, se uma linha apontar para uma conta que nao existe em memoria, essa transacao e ignorada.
 
 Na proxima gravacao, os arquivos podem ser reescritos apenas com os dados validos que ficaram carregados em memoria.
 
