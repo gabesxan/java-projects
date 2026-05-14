@@ -18,6 +18,7 @@ class TransacaoRepositoryTest {
     private Path caminhoArquivo;
 
     @BeforeEach
+    @SuppressWarnings("unused")
     void preparar() throws Exception {
         pastaTeste = Path.of("target", "test-data");
         caminhoArquivo = pastaTeste.resolve("transacoes.csv");
@@ -27,6 +28,7 @@ class TransacaoRepositoryTest {
     }
 
     @AfterEach
+    @SuppressWarnings("unused")
     void limpar() throws Exception {
         Files.deleteIfExists(caminhoArquivo);
     }
@@ -49,12 +51,6 @@ class TransacaoRepositoryTest {
 
     @Test
     void deveCarregarTransacoesDoArquivo() throws Exception {
-        pastaTeste = Path.of("target", "test-data");
-        caminhoArquivo = pastaTeste.resolve("transacoes.csv");
-
-        Files.createDirectories(pastaTeste);
-        Files.deleteIfExists(caminhoArquivo);
-
         Files.write(caminhoArquivo, List.of(
                 "1;DEPOSITO;150.0;2026-05-14T10:30;Depósito realizado"));
 
@@ -67,8 +63,6 @@ class TransacaoRepositoryTest {
         assertEquals(TipoOperacao.DEPOSITO, conta.getExtrato().get(0).getTipo());
         assertEquals(150.0, conta.getExtrato().get(0).getValor());
         assertEquals("Depósito realizado", conta.getExtrato().get(0).getDescricao());
-
-        Files.deleteIfExists(caminhoArquivo);
     }
 
 }

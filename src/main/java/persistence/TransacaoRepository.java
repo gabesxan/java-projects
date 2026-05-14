@@ -22,6 +22,10 @@ public class TransacaoRepository {
     private void carregarLinha(List<Conta> contas, String linha) {
         String[] partes = linha.split(";");
 
+        if (partes.length != 5) {
+            throw new IllegalArgumentException("Linha de transação inválida");
+        }
+
         int numeroConta = Integer.parseInt(partes[0]);
         Transacao transacao = converterPartesParaTransacao(partes);
 
@@ -91,12 +95,14 @@ public class TransacaoRepository {
         }
 
         List<String> linhas = Files.readAllLines(caminhoArquivo);
-
         for (String linha : linhas) {
             if (!linha.isBlank()) {
-                carregarLinha(contas, linha);
+                try {
+                    carregarLinha(contas, linha);
+                } catch (RuntimeException e) {
+                    System.out.println("Linha inválida ignorada em transacoes.csv: " + linha);
+                }
             }
         }
     }
-
 }

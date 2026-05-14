@@ -76,37 +76,30 @@ A pasta `data/` guarda os arquivos `contas.csv` e `transacoes.csv`, usados pela 
 - `persistence.ContaRepository`: salva e carrega as contas no arquivo `data/contas.csv`.
 - `persistence.TransacaoRepository`: salva e carrega as transacoes do extrato no arquivo `data/transacoes.csv`.
 
-## Persistencia de dados
+## Persistência em arquivos
 
-Ao iniciar, a aplicacao tenta carregar as contas salvas em `data/contas.csv` e as transacoes salvas em `data/transacoes.csv`. Durante o uso, os arquivos sao atualizados quando uma conta e criada, quando um deposito ou saque valido e realizado e quando uma transferencia e concluida com sucesso.
+Os dados da aplicacao sao salvos em arquivos CSV dentro da pasta `data/`. Isso permite manter contas e extratos entre diferentes execucoes do programa.
 
-Os arquivos usam o formato CSV separado por ponto e virgula.
+- `data/contas.csv`: guarda os dados principais das contas bancarias.
+- `data/transacoes.csv`: guarda o historico de movimentacoes (extrato) de cada conta.
 
-Formato de `contas.csv`:
+Ao iniciar, a aplicacao carrega os dados desses arquivos. Quando uma conta e criada, ou quando acontece deposito, saque ou transferencia, os dados atualizados sao gravados novamente nos CSVs.
+
+Formato de `data/contas.csv`:
 
 ```text
 numero;titular;saldo
 ```
 
-Exemplo:
-
-```text
-1;Gabriel;150.0
-```
-
-Formato de `transacoes.csv`:
+Formato de `data/transacoes.csv`:
 
 ```text
 numeroConta;tipo;valor;dataHora;descricao
 ```
 
-Exemplo:
+Durante o carregamento, linhas invalidas sao ignoradas.
 
-```text
-1;DEPOSITO;150.0;2026-05-14T10:30;Deposito realizado
-```
-
-A persistencia atual guarda numero da conta, titular e saldo, alem do historico do extrato (tipo, valor, data/hora e descricao) associado a cada conta.
+Na proxima gravacao, os arquivos podem ser reescritos apenas com os dados validos que ficaram carregados em memoria.
 
 ## Regras de negocio
 
@@ -145,7 +138,7 @@ mvn test
 Resultado da ultima execucao local:
 
 ```text
-Tests run: 39, Failures: 0, Errors: 0, Skipped: 0
+Tests run: 41, Failures: 0, Errors: 0, Skipped: 0
 BUILD SUCCESS
 ```
 

@@ -4,21 +4,35 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 
+import org.junit.jupiter.api.AfterEach;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.io.TempDir;
 
 import model.Conta;
 
 class ContaRepositoryTest {
 
-    @TempDir
-    Path pastaTemporaria;
+    private Path pastaTeste;
+    private Path caminhoArquivo;
+
+    @BeforeEach
+    void preparar() throws Exception {
+        pastaTeste = Path.of("target", "test-data");
+        caminhoArquivo = pastaTeste.resolve("contas.csv");
+
+        Files.createDirectories(pastaTeste);
+        Files.deleteIfExists(caminhoArquivo);
+    }
+
+    @AfterEach
+    void limpar() throws Exception {
+        Files.deleteIfExists(caminhoArquivo);
+    }
 
     @Test
     void deveSalvarContasEmArquivo() throws Exception {
-        Path caminhoArquivo = pastaTemporaria.resolve("contas.csv");
         ContaRepository repository = new ContaRepository(caminhoArquivo);
 
         Conta conta = new Conta(1, "Gabriel");
@@ -34,7 +48,6 @@ class ContaRepositoryTest {
 
     @Test
     void deveCarregarContasDoArquivo() throws Exception {
-        Path caminhoArquivo = pastaTemporaria.resolve("contas.csv");
         Files.write(caminhoArquivo, List.of("1;Gabriel;150.0"));
 
         ContaRepository repository = new ContaRepository(caminhoArquivo);
@@ -49,12 +62,26 @@ class ContaRepositoryTest {
 
     @Test
     void deveRetornarListaVaziaQuandoArquivoNaoExiste() throws Exception {
-        Path caminhoArquivo = pastaTemporaria.resolve("contas.csv");
-
         ContaRepository repository = new ContaRepository(caminhoArquivo);
 
         List<Conta> contas = repository.carregar();
 
         assertTrue(contas.isEmpty());
+    }
+
+    @Test
+    void deveIgnorarLinhaInvalidaAoCarregarContas() throws Exception {
+        Files.write(caminhoArquivo, List.of(
+                "1;Gabriel;150.0",
+                "linha-invalida",
+                "2;Maria;80.0"));
+
+        ContaRepository repository = new ContaRepository(caminhoArquivo);
+
+        List<Conta> contas = repository.carregar();
+
+        assertEquals(2, contas.size());
+        assertEquals(1, contas.get(0).getNumero());
+        assertEquals(2, contas.get(1).getNumero());
     }
 }

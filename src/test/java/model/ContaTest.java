@@ -6,6 +6,13 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 class ContaTest {
+    @Test
+    void deveCriarContaComSaldoInicialSemRegistrarExtrato() {
+        Conta conta = new Conta(1, "Gabriel", 150.0);
+
+        assertEquals(150.0, conta.getSaldo());
+        assertTrue(conta.getExtrato().isEmpty());
+    }
 
     @Test
     void deveDepositarValorValido() {
@@ -101,4 +108,5 @@ class ContaTest {
 
         assertEquals(1, conta.getExtrato().size());
     }
+
 }

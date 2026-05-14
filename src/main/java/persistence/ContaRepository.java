@@ -39,8 +39,12 @@ public class ContaRepository {
 
         for (String linha : linhas) {
             if (!linha.isBlank()) {
-                Conta conta = converterLinhaParaConta(linha);
-                contas.add(conta);
+                try {
+                    Conta conta = converterLinhaParaConta(linha);
+                    contas.add(conta);
+                } catch (RuntimeException e) {
+                    System.out.println("Linha inválida ignorada em contas.csv: " + linha);
+                }
             }
         }
 
@@ -62,16 +66,14 @@ public class ContaRepository {
     private Conta converterLinhaParaConta(String linha) {
         String[] partes = linha.split(";");
 
+        if (partes.length != 3) {
+            throw new IllegalArgumentException("Linha de conta inválida");
+        }
+
         int numero = Integer.parseInt(partes[0]);
         String titular = partes[1];
         double saldo = Double.parseDouble(partes[2]);
 
-        Conta conta = new Conta(numero, titular);
-
-        if (saldo > 0) {
-            conta.depositar(saldo);
-        }
-
-        return conta;
+        return new Conta(numero, titular, saldo);
     }
 }

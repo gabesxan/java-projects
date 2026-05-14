@@ -8,11 +8,15 @@ public class Conta {
     private double saldo;
     private final int numero;
 
-    public Conta(int numero, String titularInicial) {
+    public Conta(int numero, String titularInicial, double saldoInicial) {
         this.numero = numero;
         titular = titularInicial;
-        saldo = 0.0;
+        saldo = saldoInicial;
         extrato = new ArrayList<>();
+    }
+
+    public Conta(int numero, String titularInicial) {
+        this(numero, titularInicial, 0.0);
     }
 
     public ArrayList<Transacao> getExtrato() {
