@@ -35,6 +35,9 @@ public class PersistenciaBancoService {
             } catch (SQLException e) {
                 conexao.rollback();
                 throw e;
+            } catch (RuntimeException e) {
+                conexao.rollback();
+                throw e;
             } finally {
                 conexao.setAutoCommit(true);
             }

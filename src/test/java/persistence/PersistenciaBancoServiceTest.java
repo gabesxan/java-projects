@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -50,5 +51,29 @@ class PersistenciaBancoServiceTest {
 
         assertEquals(1, transacoes.size());
         assertEquals(TipoOperacao.DEPOSITO, transacoes.get(0).getTipo());
+    }
+
+    @Test
+    void deveFazerRollbackQuandoSalvarTransacaoFalhar() throws Exception {
+        ConexaoBanco conexaoBanco = new ConexaoBanco("jdbc:sqlite:" + caminhoBanco);
+        InicializadorBanco inicializador = new InicializadorBanco(conexaoBanco);
+        inicializador.inicializar();
+
+        ContaRepositoryJdbc contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
+        TransacaoRepositoryJdbc transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);
+
+        PersistenciaBancoService service = new PersistenciaBancoService(
+                conexaoBanco,
+                contaRepositoryJdbc,
+                transacaoRepositoryJdbc);
+
+        Conta conta = new Conta(1, "Gabriel", 100.0);
+        conta.adicionarTransacao(new Transacao(null, 50.0, "Transação inválida"));
+
+        assertThrows(NullPointerException.class, () -> service.salvarEstado(List.of(conta)));
+
+        List<Conta> contas = contaRepositoryJdbc.carregarTodas();
+
+        assertEquals(0, contas.size());
     }
 }
