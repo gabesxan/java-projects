@@ -11,25 +11,27 @@ import model.Conta;
 import model.ResultadoTransferencia;
 import model.Transacao;
 import persistence.ConexaoBanco;
-import persistence.ContaRepository;
+import persistence.ContaRepositoryJdbc;
 import persistence.InicializadorBanco;
 import persistence.TransacaoRepository;
 
 public class AplicacaoBancaria {
-    private final ContaRepository contaRepository;
     private final TransacaoRepository transacaoRepository;
     private final InicializadorBanco inicializadorBanco;
     private final Scanner scanner;
     private final Banco banco;
+    private final ContaRepositoryJdbc contaRepositoryJdbc;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
         banco = new Banco();
-        contaRepository = new ContaRepository(Path.of("data", "contas.csv"));
         transacaoRepository = new TransacaoRepository(Path.of("data", "transacoes.csv"));
 
         ConexaoBanco conexaoBanco = new ConexaoBanco();
         inicializadorBanco = new InicializadorBanco(conexaoBanco);
+
+        contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
+
     }
 
     public void executar() {
@@ -120,21 +122,25 @@ public class AplicacaoBancaria {
 
     private void salvarContas() {
         try {
-            contaRepository.salvar(banco.listarContas());
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar contas em arquivo.");
+            for (Conta conta : banco.listarContas()) {
+                contaRepositoryJdbc.salvar(conta);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar contas no banco de dados.");
         }
     }
 
     private void carregarContas() {
         try {
-            for (Conta conta : contaRepository.carregar()) {
+            for (Conta conta : contaRepositoryJdbc.carregarTodas()) {
                 banco.adicionarConta(conta);
             }
 
             transacaoRepository.carregar(banco.listarContas());
-        } catch (IOException e) {
-            System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
+        } catch (IOException | SQLException e) {
+            {
+                System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
+            }
         }
     }
 
