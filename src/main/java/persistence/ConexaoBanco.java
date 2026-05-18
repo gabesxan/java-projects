@@ -6,9 +6,19 @@ import java.sql.SQLException;
 
 public class ConexaoBanco {
 
-    private static final String URL = "jdbc:sqlite:data/banco.db";
+    private static final String URL_PADRAO = "jdbc:sqlite:data/banco.db";
+
+    private final String url;
+
+    public ConexaoBanco() {
+        this(URL_PADRAO);
+    }
+
+    public ConexaoBanco(String url) {
+        this.url = url;
+    }
 
     public Connection conectar() throws SQLException {
-        return DriverManager.getConnection(URL);
+        return DriverManager.getConnection(url);
     }
 }
