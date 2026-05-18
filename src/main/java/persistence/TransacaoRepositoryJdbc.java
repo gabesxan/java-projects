@@ -72,8 +72,21 @@ public class TransacaoRepositoryJdbc {
     }
 
     public void salvarTodasDaConta(Conta conta) throws SQLException {
+        apagarPorConta(conta.getNumero());
+
         for (Transacao transacao : conta.getExtrato()) {
             salvar(conta.getNumero(), transacao);
+        }
+    }
+
+    public void apagarPorConta(int numeroConta) throws SQLException {
+        String sql = "DELETE FROM transacoes WHERE numero_conta = ?";
+
+        try (Connection conexao = conexaoBanco.conectar();
+                PreparedStatement statement = conexao.prepareStatement(sql)) {
+
+            statement.setInt(1, numeroConta);
+            statement.executeUpdate();
         }
     }
 }

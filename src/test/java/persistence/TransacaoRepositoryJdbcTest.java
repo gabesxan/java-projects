@@ -124,4 +124,26 @@ class TransacaoRepositoryJdbcTest {
         assertEquals(TipoOperacao.DEPOSITO, transacoes.get(0).getTipo());
         assertEquals(TipoOperacao.SAQUE, transacoes.get(1).getTipo());
     }
+
+    @Test
+    void deveSubstituirTransacoesDaContaAoSalvarTodas() throws Exception {
+        ConexaoBanco conexaoBanco = new ConexaoBanco("jdbc:sqlite:" + caminhoBanco);
+        InicializadorBanco inicializador = new InicializadorBanco(conexaoBanco);
+        inicializador.inicializar();
+
+        ContaRepositoryJdbc contaRepository = new ContaRepositoryJdbc(conexaoBanco);
+
+        Conta conta = new Conta(1, "Gabriel", 100.0);
+        conta.depositar(50);
+        contaRepository.salvar(conta);
+
+        TransacaoRepositoryJdbc transacaoRepository = new TransacaoRepositoryJdbc(conexaoBanco);
+        transacaoRepository.salvarTodasDaConta(conta);
+        transacaoRepository.salvarTodasDaConta(conta);
+
+        List<Transacao> transacoes = transacaoRepository.carregarPorConta(1);
+
+        assertEquals(1, transacoes.size());
+        assertEquals(TipoOperacao.DEPOSITO, transacoes.get(0).getTipo());
+    }
 }

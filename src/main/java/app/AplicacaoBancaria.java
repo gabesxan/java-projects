@@ -1,7 +1,5 @@
 package app;
 
-import java.io.IOException;
-import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
@@ -13,24 +11,24 @@ import model.Transacao;
 import persistence.ConexaoBanco;
 import persistence.ContaRepositoryJdbc;
 import persistence.InicializadorBanco;
-import persistence.TransacaoRepository;
+import persistence.TransacaoRepositoryJdbc;
 
 public class AplicacaoBancaria {
-    private final TransacaoRepository transacaoRepository;
     private final InicializadorBanco inicializadorBanco;
     private final Scanner scanner;
     private final Banco banco;
     private final ContaRepositoryJdbc contaRepositoryJdbc;
+    private final TransacaoRepositoryJdbc transacaoRepositoryJdbc;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
         banco = new Banco();
-        transacaoRepository = new TransacaoRepository(Path.of("data", "transacoes.csv"));
 
         ConexaoBanco conexaoBanco = new ConexaoBanco();
         inicializadorBanco = new InicializadorBanco(conexaoBanco);
 
         contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
+        transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);
 
     }
 
@@ -136,8 +134,12 @@ public class AplicacaoBancaria {
                 banco.adicionarConta(conta);
             }
 
-            transacaoRepository.carregar(banco.listarContas());
-        } catch (IOException | SQLException e) {
+            for (Conta conta : banco.listarContas()) {
+                for (Transacao transacao : transacaoRepositoryJdbc.carregarPorConta(conta.getNumero())) {
+                    conta.adicionarTransacao(transacao);
+                }
+            }
+        } catch (SQLException e) {
             {
                 System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
             }
@@ -324,9 +326,11 @@ public class AplicacaoBancaria {
 
     private void salvarTransacoes() {
         try {
-            transacaoRepository.salvar(banco.listarContas());
-        } catch (IOException e) {
-            System.out.println("Erro ao salvar transações em arquivo.");
+            for (Conta conta : banco.listarContas()) {
+                transacaoRepositoryJdbc.salvarTodasDaConta(conta);
+            }
+        } catch (SQLException e) {
+            System.out.println("Erro ao salvar transações no banco de dados.");
         }
     }
 }
