@@ -430,6 +430,25 @@ Fluxo conceitual:
 ResultSet -> ler tipo, valor, data_hora, descricao -> criar Transacao
 ```
 
+## Transações de banco de dados
+
+Uma transação de banco de dados é um conjunto de operações que deve ser tratado como uma unidade.
+
+No simulador bancário, uma transferência envolve várias mudanças:
+
+- atualizar saldo da conta de origem;
+- atualizar saldo da conta de destino;
+- registrar uma transação enviada;
+- registrar uma transação recebida.
+
+Essas operações devem acontecer juntas. Se uma falhar, todas devem ser desfeitas.
+
+`commit` confirma as alterações.
+
+`rollback` desfaz as alterações caso ocorra erro.
+
+Esse conceito evita que o banco fique em estado inconsistente.
+
 ## Ordem de implementação usada
 
 A seguinte ordem foi adotada para implementar o suporte SQLite/JDBC no projeto:
