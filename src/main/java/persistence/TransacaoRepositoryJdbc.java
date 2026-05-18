@@ -21,14 +21,18 @@ public class TransacaoRepositoryJdbc {
     }
 
     public void salvar(int numeroConta, Transacao transacao) throws SQLException {
+        try (Connection conexao = conexaoBanco.conectar()) {
+            salvar(numeroConta, transacao, conexao);
+        }
+    }
+
+    public void salvar(int numeroConta, Transacao transacao, Connection conexao) throws SQLException {
         String sql = """
                 INSERT INTO transacoes (numero_conta, tipo, valor, data_hora, descricao)
                 VALUES (?, ?, ?, ?, ?)
                 """;
 
-        try (Connection conexao = conexaoBanco.conectar();
-                PreparedStatement statement = conexao.prepareStatement(sql)) {
-
+        try (PreparedStatement statement = conexao.prepareStatement(sql)) {
             statement.setInt(1, numeroConta);
             statement.setString(2, transacao.getTipo().name());
             statement.setDouble(3, transacao.getValor());
@@ -72,19 +76,29 @@ public class TransacaoRepositoryJdbc {
     }
 
     public void salvarTodasDaConta(Conta conta) throws SQLException {
-        apagarPorConta(conta.getNumero());
+        try (Connection conexao = conexaoBanco.conectar()) {
+            salvarTodasDaConta(conta, conexao);
+        }
+    }
+
+    public void salvarTodasDaConta(Conta conta, Connection conexao) throws SQLException {
+        apagarPorConta(conta.getNumero(), conexao);
 
         for (Transacao transacao : conta.getExtrato()) {
-            salvar(conta.getNumero(), transacao);
+            salvar(conta.getNumero(), transacao, conexao);
         }
     }
 
     public void apagarPorConta(int numeroConta) throws SQLException {
+        try (Connection conexao = conexaoBanco.conectar()) {
+            apagarPorConta(numeroConta, conexao);
+        }
+    }
+
+    public void apagarPorConta(int numeroConta, Connection conexao) throws SQLException {
         String sql = "DELETE FROM transacoes WHERE numero_conta = ?";
 
-        try (Connection conexao = conexaoBanco.conectar();
-                PreparedStatement statement = conexao.prepareStatement(sql)) {
-
+        try (PreparedStatement statement = conexao.prepareStatement(sql)) {
             statement.setInt(1, numeroConta);
             statement.executeUpdate();
         }

@@ -11,9 +11,11 @@ import model.Transacao;
 import persistence.ConexaoBanco;
 import persistence.ContaRepositoryJdbc;
 import persistence.InicializadorBanco;
+import persistence.PersistenciaBancoService;
 import persistence.TransacaoRepositoryJdbc;
 
 public class AplicacaoBancaria {
+    private final PersistenciaBancoService persistenciaBancoService;
     private final InicializadorBanco inicializadorBanco;
     private final Scanner scanner;
     private final Banco banco;
@@ -29,6 +31,11 @@ public class AplicacaoBancaria {
 
         contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
         transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);
+        persistenciaBancoService = new PersistenciaBancoService(
+        conexaoBanco,
+        contaRepositoryJdbc,
+        transacaoRepositoryJdbc);
+
 
     }
 
@@ -76,6 +83,7 @@ public class AplicacaoBancaria {
             }
         }
     }
+    
 
     private void mostrarMenu() {
         System.out.println("======Sistema Bancário======");
