@@ -390,16 +390,4 @@ SELECT * FROM transacoes
 WHERE tipo = 'DEPOSITO';
 ```
 
-## Próxima etapa futura
 
-Depois de entender este modelo e os comandos SQL básicos, a próxima etapa será estudar JDBC.
-
-JDBC é a forma tradicional de uma aplicação Java se conectar a um banco de dados.
-
-Antes de implementar JDBC no projeto, ainda será necessário entender:
-
-- o que é uma conexão com banco;
-- o que é um driver JDBC;
-- como executar comandos SQL a partir do Java;
-- como transformar linhas do banco em objetos Java;
-- como transformar objetos Java em comandos SQL.

@@ -3,3 +3,6 @@ bin/
 .vscode/
 .DS_Store
 target/
+data/*.csv
+data/*.db
+

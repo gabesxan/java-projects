@@ -65,4 +65,20 @@ class TransacaoRepositoryTest {
         assertEquals("Depósito realizado", conta.getExtrato().get(0).getDescricao());
     }
 
+    @Test
+    void deveIgnorarLinhaInvalidaAoCarregarTransacoes() throws Exception {
+        Files.write(caminhoArquivo, List.of(
+                "1;DEPOSITO;150.0;2026-05-14T10:30;Depósito realizado",
+                "linha-invalida",
+                "1;SAQUE;50.0;2026-05-14T11:00;Saque realizado"));
+
+        TransacaoRepository repository = new TransacaoRepository(caminhoArquivo);
+
+        Conta conta = new Conta(1, "Gabriel");
+        repository.carregar(List.of(conta));
+
+        assertEquals(2, conta.getExtrato().size());
+        assertEquals(TipoOperacao.DEPOSITO, conta.getExtrato().get(0).getTipo());
+        assertEquals(TipoOperacao.SAQUE, conta.getExtrato().get(1).getTipo());
+    }
 }
