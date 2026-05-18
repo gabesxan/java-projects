@@ -6,6 +6,8 @@ Ele é o recurso usado em Java para conectar uma aplicação a um banco de dados
 
 Neste projeto, JDBC será estudado depois do modelo conceitual do banco, para que a aplicação possa futuramente substituir a persistência em CSV por persistência em banco de dados.
 
+No projeto atual, esses conceitos já foram aplicados usando SQLite. As classes principais da integração são `ConexaoBanco`, `InicializadorBanco`, `ContaRepositoryJdbc` e `TransacaoRepositoryJdbc`.
+
 A ideia geral é:
 
 ```text

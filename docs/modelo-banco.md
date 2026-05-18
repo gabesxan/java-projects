@@ -4,6 +4,8 @@ O objetivo deste documento é planejar, em linguagem simples, como os dados do s
 
 Este documento ainda não implementa banco de dados no projeto. Ele serve como preparação para uma futura etapa com SQL e JDBC.
 
+No projeto atual, o modelo conceitual de contas e transações já foi aplicado em SQLite. As tabelas principais são `contas` e `transacoes`.
+
 ## O que é um banco de dados relacional
 
 Um banco de dados relacional é uma forma organizada de guardar dados em tabelas.

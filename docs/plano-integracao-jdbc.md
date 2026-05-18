@@ -2,14 +2,11 @@
 
 ## Estado atual
 
-A aplicação atualmente usa persistência em arquivos CSV.
+A aplicação agora usa persistência principal em SQLite via JDBC.
 
-Arquivos usados:
+O banco de dados SQLite fica em `data/banco.db`.
 
-- `data/contas.csv`
-- `data/transacoes.csv`
-
-Esses arquivos são lidos ao iniciar a aplicação e atualizados após operações relevantes.
+As tabelas são inicializadas automaticamente ao iniciar a aplicação.
 
 ## O que já existe em JDBC
 
@@ -29,12 +26,9 @@ Também já existem testes automatizados cobrindo:
 
 ## O que ainda usa CSV
 
-A classe `AplicacaoBancaria` ainda usa os repositories baseados em CSV:
+A persistência CSV hoje é uma etapa anterior. Os repositories CSV ainda existem no projeto para suportar a migração de dados antigos para SQLite, mas a aplicação principal já usa SQLite para contas e transações.
 
-- `ContaRepository`
-- `TransacaoRepository`
-
-Ou seja, mesmo com JDBC implementado e testado, a aplicação de terminal ainda não usa o banco SQLite.
+Os arquivos CSV podem ser mantidos como legado ou removidos em uma etapa futura.
 
 ## Por que não trocar tudo de uma vez
 
@@ -48,39 +42,15 @@ Trocar CSV por JDBC diretamente pode misturar várias mudanças ao mesmo tempo:
 
 Por isso, a integração deve ser feita em etapas pequenas.
 
-## Plano de integração
+## Etapas executadas
 
-### Etapa 1: manter CSV funcionando
+O plano de integração JDBC já foi realizado no projeto.
 
-Antes de integrar JDBC, garantir que a versão atual com CSV continua funcionando e com testes passando.
-
-### Etapa 2: inicializar o banco ao iniciar a aplicação
-
-Adicionar o uso de `InicializadorBanco` para garantir que as tabelas existam.
-
-Nesta etapa, a aplicação ainda pode continuar usando CSV.
-
-### Etapa 3: carregar contas pelo JDBC
-
-Trocar apenas o carregamento inicial de contas para usar `ContaRepositoryJdbc`.
-
-Ainda não trocar transações.
-
-### Etapa 4: salvar contas pelo JDBC
-
-Depois que o carregamento funcionar, salvar contas no banco após criação, depósito, saque e transferência.
-
-### Etapa 5: carregar transações pelo JDBC
-
-Carregar o extrato das contas usando `TransacaoRepositoryJdbc`.
-
-### Etapa 6: salvar transações pelo JDBC
-
-Salvar transações no banco após depósito, saque e transferência.
-
-### Etapa 7: remover ou manter CSV
-
-Depois que JDBC estiver funcionando, decidir se os repositories CSV serão mantidos como estudo/backup ou se serão removidos da aplicação.
+- Criação da conexão SQLite em `ConexaoBanco`.
+- Inicialização automática das tabelas com `InicializadorBanco`.
+- Criação dos repositories `ContaRepositoryJdbc` e `TransacaoRepositoryJdbc`.
+- Migração de dados CSV para SQLite por `MigradorCsvParaJdbc` e `MigracaoCsvParaJdbcMain`.
+- Uso de SQLite pela `AplicacaoBancaria` para contas e transações.
 
 ## Cuidados
 
@@ -89,3 +59,5 @@ Depois que JDBC estiver funcionando, decidir se os repositories CSV serão manti
 - Rodar `mvn test` após cada etapa.
 - Testar manualmente a aplicação de terminal após cada mudança.
 - Não commitar arquivos `.db`.
+- `data/banco.db` não deve ser versionado no Git.
+- O CSV pode ser mantido como legado ou removido em uma etapa futura.

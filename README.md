@@ -1,8 +1,8 @@
 # Simulador de Conta Bancaria em Java
 
-Projeto educacional de um simulador bancario feito em Java puro, executado pelo terminal e organizado com Maven. A aplicacao foi criada para praticar programacao orientada a objetos, separacao de responsabilidades, encapsulamento, enums, registro de extrato, persistencia simples em arquivo e testes automatizados com JUnit 5.
+Projeto educacional de um simulador bancario feito em Java puro, executado pelo terminal e organizado com Maven. A aplicacao foi criada para praticar programacao orientada a objetos, separacao de responsabilidades, encapsulamento, enums, registro de extrato, persistencia com JDBC/SQLite e testes automatizados com JUnit 5.
 
-O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Toda a interacao acontece pelo terminal.
+O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao acontece pelo terminal.
 
 ## Funcionalidades
 
@@ -13,13 +13,15 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 - Buscar conta por numero.
 - Transferir valores entre contas.
 - Gerar extrato com historico de operacoes.
-- Salvar e carregar contas em arquivo CSV.
-- Salvar e carregar transacoes do extrato em arquivo CSV.
+- Persistir contas e transacoes em banco SQLite.
+- Suporte a migracao de dados CSV para SQLite.
 
 ## Tecnologias
 
 - Java 25.
 - Maven.
+- JDBC.
+- SQLite.
 - JUnit 5.
 - Maven Surefire Plugin.
 
@@ -30,6 +32,7 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
 ├── pom.xml
 ├── README.md
 ├── data
+│   ├── banco.db
 │   ├── contas.csv
 │   └── transacoes.csv
 └── src
@@ -37,7 +40,8 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
     │   └── java
     │       ├── app
     │       │   ├── AplicacaoBancaria.java
-    │       │   └── Main.java
+    │       │   ├── Main.java
+    │       │   └── MigracaoCsvParaJdbcMain.java
     │       ├── model
     │       │   ├── Banco.java
     │       │   ├── Conta.java
@@ -45,8 +49,13 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
     │       │   ├── TipoOperacao.java
     │       │   └── Transacao.java
     │       └── persistence
+    │           ├── ConexaoBanco.java
     │           ├── ContaRepository.java
-    │           └── TransacaoRepository.java
+    │           ├── ContaRepositoryJdbc.java
+    │           ├── InicializadorBanco.java
+    │           ├── MigradorCsvParaJdbc.java
+    │           ├── TransacaoRepository.java
+    │           └── TransacaoRepositoryJdbc.java
     └── test
         └── java
             ├── model
@@ -56,82 +65,67 @@ O projeto nao usa Spring Boot, banco de dados, API web ou interface grafica. Tod
             │   ├── TipoOperacaoTest.java
             │   └── TransacaoTest.java
             └── persistence
+                ├── ContaRepositoryJdbcTest.java
                 ├── ContaRepositoryTest.java
+                ├── ConexaoBancoTest.java
+                ├── InicializadorBancoTest.java
+                ├── MigradorCsvParaJdbcTest.java
+                ├── TransacaoRepositoryJdbcTest.java
                 └── TransacaoRepositoryTest.java
 ```
 
 A pasta `target/` e gerada automaticamente pelo Maven durante compilacao e testes. Ela nao faz parte do codigo-fonte.
 
-A pasta `data/` guarda os arquivos `contas.csv` e `transacoes.csv`, usados pela aplicacao para manter contas e extratos entre execucoes.
+A pasta `data/` guarda principalmente o arquivo `banco.db` usado pela persistencia atual em SQLite. Os arquivos `contas.csv` e `transacoes.csv` existem como suporte de migracao legada e nao sao a fonte principal de dados hoje.
+
+> Observacao: arquivos gerados em `data/`, como `banco.db`, `contas.csv` e `transacoes.csv`, nao devem ser commitados no Git.
 
 ## Organizacao da aplicacao
 
 - `app.Main`: ponto de entrada do programa. Cria a aplicacao bancaria e inicia a execucao.
+- `app.MigracaoCsvParaJdbcMain`: classe para executar a migracao de dados CSV para SQLite.
 - `app.AplicacaoBancaria`: controla o menu, a leitura de dados no terminal e o fluxo das operacoes.
 - `model.Banco`: gerencia as contas, busca por numero e coordena transferencias.
 - `model.Conta`: representa uma conta individual, com numero, titular, saldo e extrato.
 - `model.Transacao`: representa um item do extrato, com tipo, valor, data/hora e descricao.
 - `model.TipoOperacao`: enum com os tipos de operacao registrados no extrato.
 - `model.ResultadoTransferencia`: enum com os possiveis resultados de uma transferencia.
-- `persistence.ContaRepository`: salva e carrega as contas no arquivo `data/contas.csv`.
-- `persistence.TransacaoRepository`: salva e carrega as transacoes do extrato no arquivo `data/transacoes.csv`.
+- `persistence.ConexaoBanco`: gerencia a conexao JDBC com o banco SQLite.
+- `persistence.InicializadorBanco`: cria e inicializa as tabelas automaticamente ao iniciar a aplicacao.
+- `persistence.ContaRepositoryJdbc`: salva e carrega as contas no banco `data/banco.db`.
+- `persistence.TransacaoRepositoryJdbc`: salva e carrega as transacoes no banco `data/banco.db`.
+- `persistence.MigradorCsvParaJdbc`: converte os dados antigos de CSV para o banco SQLite.
+- `persistence.ContaRepository`: interface de repositorio de contas.
+- `persistence.TransacaoRepository`: interface de repositorio de transacoes.
 
-## Persistência em arquivos
+## Persistência atual
 
-Os dados da aplicacao sao salvos em arquivos CSV dentro da pasta `data/`. Isso permite manter contas e extratos entre diferentes execucoes do programa.
+A persistencia principal do projeto agora usa SQLite via JDBC.
 
-- `data/contas.csv`: guarda os dados principais das contas bancarias.
-- `data/transacoes.csv`: guarda o historico de movimentacoes (extrato) de cada conta.
+- O banco de dados SQLite fica em `data/banco.db`.
+- Ao iniciar a aplicacao, `InicializadorBanco` cria automaticamente as tabelas se elas ainda nao existirem.
+- As contas sao salvas e carregadas por `ContaRepositoryJdbc`.
+- As transacoes/extrato sao salvas e carregadas por `TransacaoRepositoryJdbc`.
+- `ConexaoBanco` fornece a conexao JDBC para `data/banco.db`.
 
-Ao iniciar, a aplicacao carrega as contas de `data/contas.csv` e depois carrega as transacoes de `data/transacoes.csv`.
+Os arquivos CSV ainda existem no projeto, mas hoje servem apenas como suporte para a migracao de dados antiga. A persistencia principal ja e feita no banco SQLite.
 
-Durante o uso, a aplicacao grava os arquivos novamente quando:
+## Migracao CSV -> SQLite
 
-- uma conta e criada com sucesso;
-- um deposito e realizado com sucesso;
-- um saque e realizado com sucesso;
-- uma transferencia e concluida com sucesso.
+Para migrar os dados antigos de `data/contas.csv` e `data/transacoes.csv` para o banco `data/banco.db`, execute:
 
-Formato de `data/contas.csv`:
-
-```text
-numero;titular;saldo
+```bash
+mvn exec:java -Dexec.mainClass=app.MigracaoCsvParaJdbcMain
 ```
 
-Formato de `data/transacoes.csv`:
-
-```text
-numeroConta;tipo;valor;dataHora;descricao
-```
-
-Durante o carregamento, linhas invalidas sao ignoradas.
-
-No carregamento de transacoes, se uma linha apontar para uma conta que nao existe em memoria, essa transacao e ignorada.
-
-Na proxima gravacao, os arquivos podem ser reescritos apenas com os dados validos que ficaram carregados em memoria.
-
-## Regras de negocio
-
-- Nao e permitido criar duas contas com o mesmo numero pelo fluxo da aplicacao.
-- Depositos, saques e transferencias precisam ter valor maior que zero.
-- Saques e transferencias exigem saldo suficiente.
-- Transferencias validam origem, destino, valor, saldo e contas diferentes.
-- Operacoes validas registram movimentacoes no extrato.
-- Tentativas invalidas nao devem alterar saldo nem registrar novas transacoes.
+Esse comando usa o `MigradorCsvParaJdbc` para ler os arquivos CSV existentes e inserir os registros no SQLite.
 
 ## Como executar
 
-Na raiz do projeto, compile e execute a classe principal:
+Na raiz do projeto, execute a aplicacao principal com:
 
 ```bash
-mvn compile
-java -cp target/classes app.Main
-```
-
-Tambem e possivel executar diretamente pelo Maven quando o plugin de execucao estiver disponivel no ambiente:
-
-```bash
-mvn compile exec:java -Dexec.mainClass=app.Main
+mvn exec:java -Dexec.mainClass=app.Main
 ```
 
 ## Testes automatizados
@@ -144,13 +138,6 @@ Para rodar todos os testes:
 mvn test
 ```
 
-Resultado da ultima execucao local:
-
-```text
-Tests run: 41, Failures: 0, Errors: 0, Skipped: 0
-BUILD SUCCESS
-```
-
 Classes de teste atuais:
 
 - `ContaTest`: valida depositos, saques, saldo e registro de extrato para operacoes validas e invalidas.
@@ -158,46 +145,23 @@ Classes de teste atuais:
 - `TransacaoTest`: valida criacao de transacoes, dados registrados e formatacao para extrato.
 - `TipoOperacaoTest`: valida as descricoes amigaveis dos tipos de operacao.
 - `ResultadoTransferenciaTest`: valida os valores esperados do enum de resultados de transferencia.
-- `ContaRepositoryTest`: valida salvamento, carregamento e retorno de lista vazia quando o arquivo ainda nao existe.
-- `TransacaoRepositoryTest`: valida salvamento e carregamento de transacoes em arquivo CSV.
-
-Cobertura comportamental principal:
-
-- Deposito valido aumenta saldo e registra extrato.
-- Deposito invalido mantem saldo e nao registra extrato.
-- Saque valido reduz saldo e registra extrato.
-- Saque invalido ou com saldo insuficiente mantem saldo.
-- Busca de conta retorna a conta correta ou `null` quando inexistente.
-- Transferencia valida debita a origem, credita o destino e registra extrato nas duas contas.
-- Transferencias invalidas retornam o resultado adequado e preservam os saldos.
-- Transferencia para a mesma conta preserva o extrato.
-- Transacoes mantem tipo, valor, descricao, data/hora e formato de exibicao.
-- Enums de operacao e de resultado de transferencia mantem os valores esperados.
-- Repositorio de contas grava o arquivo CSV e carrega as contas salvas.
-- Repositorio de transacoes grava o arquivo CSV e recarrega o extrato por conta.
-
-## Checklist de testes manuais
-
-Depois de executar o programa pelo terminal, use o menu para validar os principais fluxos:
-
-- [ ] Criar uma conta com numero ainda nao usado.
-- [ ] Tentar criar conta com numero repetido.
-- [ ] Depositar valor maior que zero.
-- [ ] Tentar depositar valor zero ou negativo.
-- [ ] Sacar valor valido dentro do saldo disponivel.
-- [ ] Tentar sacar valor maior que o saldo.
-- [ ] Consultar saldo de uma conta existente.
-- [ ] Listar contas cadastradas.
-- [ ] Buscar conta por numero.
-- [ ] Transferir entre duas contas diferentes.
-- [ ] Tentar transferir para a mesma conta.
-- [ ] Tentar transferir com origem ou destino inexistente.
-- [ ] Tentar transferir com saldo insuficiente.
-- [ ] Gerar extrato apos deposito, saque ou transferencia.
-- [ ] Fechar e abrir a aplicacao novamente para confirmar que as contas foram carregadas.
-- [ ] Confirmar que operacoes invalidas nao alteram saldo nem extrato.
+- `ContaRepositoryJdbcTest`: valida salvamento e carregamento de contas em SQLite.
+- `TransacaoRepositoryJdbcTest`: valida salvamento e carregamento de transacoes em SQLite.
+- `ContaRepositoryTest`: valida a interface de repositorio de contas, incluindo suporte CSV.
+- `TransacaoRepositoryTest`: valida a interface de repositorio de transacoes, incluindo suporte CSV.
+- `ConexaoBancoTest`: valida a configuracao da conexao SQLite.
+- `InicializadorBancoTest`: valida a criacao e inicializacao das tabelas.
+- `MigradorCsvParaJdbcTest`: valida a migracao de CSV para SQLite.
 
 ## Conceitos praticados
+
+- Programacao orientada a objetos.
+- Encapsulamento e separacao de responsabilidades.
+- Uso de enums para tipos e resultados.
+- Persistencia com JDBC e SQLite.
+- Testes unitarios com JUnit 5.
+- Migracao de dados entre formatos legados e atuais.
+
 
 - Sintaxe basica Java.
 - Aplicacao de terminal com `Scanner`.
