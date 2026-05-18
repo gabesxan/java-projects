@@ -32,11 +32,9 @@ public class AplicacaoBancaria {
         contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
         transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);
         persistenciaBancoService = new PersistenciaBancoService(
-        conexaoBanco,
-        contaRepositoryJdbc,
-        transacaoRepositoryJdbc);
-
-
+                conexaoBanco,
+                contaRepositoryJdbc,
+                transacaoRepositoryJdbc);
     }
 
     public void executar() {
@@ -115,7 +113,7 @@ public class AplicacaoBancaria {
             boolean contaAdicionada = banco.adicionarConta(novaConta);
 
             if (contaAdicionada) {
-                salvarContas();
+                salvarEstadoBanco();
 
                 System.out.println("Conta criada para: " + novaConta.getTitular());
                 System.out.println("Número da conta: " + novaConta.getNumero());
@@ -123,16 +121,6 @@ public class AplicacaoBancaria {
             } else {
                 System.out.println("Já existe uma conta com esse número.");
             }
-        }
-    }
-
-    private void salvarContas() {
-        try {
-            for (Conta conta : banco.listarContas()) {
-                contaRepositoryJdbc.salvar(conta);
-            }
-        } catch (SQLException e) {
-            System.out.println("Erro ao salvar contas no banco de dados.");
         }
     }
 
@@ -194,8 +182,7 @@ public class AplicacaoBancaria {
                 boolean depositoRealizado = contaEncontrada.depositar(valorDeposito);
 
                 if (depositoRealizado) {
-                    salvarContas();
-                    salvarTransacoes();
+                    salvarEstadoBanco();
 
                     System.out.println("Depósito realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
@@ -222,8 +209,7 @@ public class AplicacaoBancaria {
                 boolean saqueRealizado = contaEncontrada.sacar(valorSaque);
 
                 if (saqueRealizado) {
-                    salvarContas();
-                    salvarTransacoes();
+                    salvarEstadoBanco();
 
                     System.out.println("Saque realizado com sucesso.");
                     mostrarDadosConta(contaEncontrada);
@@ -279,8 +265,7 @@ public class AplicacaoBancaria {
 
             switch (resultado) {
                 case SUCESSO -> {
-                    salvarContas();
-                    salvarTransacoes();
+                    salvarEstadoBanco();
 
                     Conta origem = banco.buscarContaPorNumero(numeroOrigem);
                     Conta destino = banco.buscarContaPorNumero(numeroDestino);
@@ -332,13 +317,11 @@ public class AplicacaoBancaria {
         }
     }
 
-    private void salvarTransacoes() {
+    private void salvarEstadoBanco() {
         try {
-            for (Conta conta : banco.listarContas()) {
-                transacaoRepositoryJdbc.salvarTodasDaConta(conta);
-            }
+            persistenciaBancoService.salvarEstado(banco.listarContas());
         } catch (SQLException e) {
-            System.out.println("Erro ao salvar transações no banco de dados.");
+            System.out.println("Erro ao salvar dados no banco de dados.");
         }
     }
 }

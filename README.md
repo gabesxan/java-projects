@@ -54,6 +54,7 @@ O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao ac
     │           ├── ContaRepositoryJdbc.java
     │           ├── InicializadorBanco.java
     │           ├── MigradorCsvParaJdbc.java
+    │           ├── PersistenciaBancoService.java
     │           ├── TransacaoRepository.java
     │           └── TransacaoRepositoryJdbc.java
     └── test
@@ -70,6 +71,7 @@ O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao ac
                 ├── ConexaoBancoTest.java
                 ├── InicializadorBancoTest.java
                 ├── MigradorCsvParaJdbcTest.java
+                ├── PersistenciaBancoServiceTest.java
                 ├── TransacaoRepositoryJdbcTest.java
                 └── TransacaoRepositoryTest.java
 ```
@@ -157,6 +159,7 @@ Classes de teste atuais:
 - `ConexaoBancoTest`: valida a configuracao da conexao SQLite.
 - `InicializadorBancoTest`: valida a criacao e inicializacao das tabelas.
 - `MigradorCsvParaJdbcTest`: valida a migracao de CSV para SQLite.
+- `PersistenciaBancoServiceTest`: valida o salvamento coordenado de contas e transações em uma transação SQL.
 
 ## Conceitos praticados
 
