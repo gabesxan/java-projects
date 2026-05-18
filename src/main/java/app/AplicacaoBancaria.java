@@ -2,6 +2,7 @@ package app;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
@@ -9,25 +10,34 @@ import model.Banco;
 import model.Conta;
 import model.ResultadoTransferencia;
 import model.Transacao;
+import persistence.ConexaoBanco;
 import persistence.ContaRepository;
+import persistence.InicializadorBanco;
 import persistence.TransacaoRepository;
 
 public class AplicacaoBancaria {
     private final ContaRepository contaRepository;
+    private final TransacaoRepository transacaoRepository;
+    private final InicializadorBanco inicializadorBanco;
     private final Scanner scanner;
     private final Banco banco;
-    private final TransacaoRepository transacaoRepository;
 
     public AplicacaoBancaria() {
         scanner = new Scanner(System.in);
         banco = new Banco();
         contaRepository = new ContaRepository(Path.of("data", "contas.csv"));
         transacaoRepository = new TransacaoRepository(Path.of("data", "transacoes.csv"));
+
+        ConexaoBanco conexaoBanco = new ConexaoBanco();
+        inicializadorBanco = new InicializadorBanco(conexaoBanco);
     }
 
     public void executar() {
-        boolean continuar = true;
+        inicializarBanco();
         carregarContas();
+
+        boolean continuar = true;
+
         while (continuar) {
             mostrarMenu();
             int opcao = lerInteiro("Escolha uma opção:");
@@ -125,6 +135,14 @@ public class AplicacaoBancaria {
             transacaoRepository.carregar(banco.listarContas());
         } catch (IOException e) {
             System.out.println("Nenhum arquivo de contas encontrado ou erro ao carregar contas.");
+        }
+    }
+
+    private void inicializarBanco() {
+        try {
+            inicializadorBanco.inicializar();
+        } catch (SQLException e) {
+            System.out.println("Erro ao inicializar banco de dados.");
         }
     }
 
