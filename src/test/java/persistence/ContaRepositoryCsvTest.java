@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import model.Conta;
 
-class ContaRepositoryTest {
+class ContaRepositoryCsvTest {
 
     private Path pastaTeste;
     private Path caminhoArquivo;
@@ -33,7 +33,7 @@ class ContaRepositoryTest {
 
     @Test
     void deveSalvarContasEmArquivo() throws Exception {
-        ContaRepository repository = new ContaRepository(caminhoArquivo);
+        ContaRepositoryCsv repository = new ContaRepositoryCsv(caminhoArquivo);
 
         Conta conta = new Conta(1, "Gabriel");
         conta.depositar(150);
@@ -50,7 +50,7 @@ class ContaRepositoryTest {
     void deveCarregarContasDoArquivo() throws Exception {
         Files.write(caminhoArquivo, List.of("1;Gabriel;150.0"));
 
-        ContaRepository repository = new ContaRepository(caminhoArquivo);
+        ContaRepositoryCsv repository = new ContaRepositoryCsv(caminhoArquivo);
 
         List<Conta> contas = repository.carregar();
 
@@ -62,7 +62,7 @@ class ContaRepositoryTest {
 
     @Test
     void deveRetornarListaVaziaQuandoArquivoNaoExiste() throws Exception {
-        ContaRepository repository = new ContaRepository(caminhoArquivo);
+        ContaRepositoryCsv repository = new ContaRepositoryCsv(caminhoArquivo);
 
         List<Conta> contas = repository.carregar();
 
@@ -76,7 +76,7 @@ class ContaRepositoryTest {
                 "linha-invalida",
                 "2;Maria;80.0"));
 
-        ContaRepository repository = new ContaRepository(caminhoArquivo);
+        ContaRepositoryCsv repository = new ContaRepositoryCsv(caminhoArquivo);
 
         List<Conta> contas = repository.carregar();
 

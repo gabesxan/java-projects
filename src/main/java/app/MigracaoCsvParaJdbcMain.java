@@ -3,11 +3,11 @@ package app;
 import java.nio.file.Path;
 
 import persistence.ConexaoBanco;
-import persistence.ContaRepository;
+import persistence.ContaRepositoryCsv;
 import persistence.ContaRepositoryJdbc;
 import persistence.InicializadorBanco;
 import persistence.MigradorCsvParaJdbc;
-import persistence.TransacaoRepository;
+import persistence.TransacaoRepositoryCsv;
 import persistence.TransacaoRepositoryJdbc;
 
 public class MigracaoCsvParaJdbcMain {
@@ -18,8 +18,8 @@ public class MigracaoCsvParaJdbcMain {
             InicializadorBanco inicializadorBanco = new InicializadorBanco(conexaoBanco);
             inicializadorBanco.inicializar();
 
-            ContaRepository contaRepositoryCsv = new ContaRepository(Path.of("data", "contas.csv"));
-            TransacaoRepository transacaoRepositoryCsv = new TransacaoRepository(Path.of("data", "transacoes.csv"));
+            ContaRepositoryCsv contaRepositoryCsv = new ContaRepositoryCsv(Path.of("data", "contas.csv"));
+            TransacaoRepositoryCsv transacaoRepositoryCsv = new TransacaoRepositoryCsv(Path.of("data", "transacoes.csv"));
 
             ContaRepositoryJdbc contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
             TransacaoRepositoryJdbc transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);

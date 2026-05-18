@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 import model.Conta;
 import model.TipoOperacao;
 
-class TransacaoRepositoryTest {
+class TransacaoRepositoryCsvTest {
 
     private Path pastaTeste;
     private Path caminhoArquivo;
@@ -35,7 +35,7 @@ class TransacaoRepositoryTest {
 
     @Test
     void deveSalvarTransacoesEmArquivo() throws Exception {
-        TransacaoRepository repository = new TransacaoRepository(caminhoArquivo);
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
 
         Conta conta = new Conta(1, "Gabriel");
         conta.depositar(150);
@@ -54,7 +54,7 @@ class TransacaoRepositoryTest {
         Files.write(caminhoArquivo, List.of(
                 "1;DEPOSITO;150.0;2026-05-14T10:30;Depósito realizado"));
 
-        TransacaoRepository repository = new TransacaoRepository(caminhoArquivo);
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
 
         Conta conta = new Conta(1, "Gabriel");
         repository.carregar(List.of(conta));
@@ -72,7 +72,7 @@ class TransacaoRepositoryTest {
                 "linha-invalida",
                 "1;SAQUE;50.0;2026-05-14T11:00;Saque realizado"));
 
-        TransacaoRepository repository = new TransacaoRepository(caminhoArquivo);
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
 
         Conta conta = new Conta(1, "Gabriel");
         repository.carregar(List.of(conta));

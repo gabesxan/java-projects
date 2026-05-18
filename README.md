@@ -50,12 +50,12 @@ O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao ac
     │       │   └── Transacao.java
     │       └── persistence
     │           ├── ConexaoBanco.java
-    │           ├── ContaRepository.java
+    │           ├── ContaRepositoryCsv.java
     │           ├── ContaRepositoryJdbc.java
     │           ├── InicializadorBanco.java
     │           ├── MigradorCsvParaJdbc.java
     │           ├── PersistenciaBancoService.java
-    │           ├── TransacaoRepository.java
+    │           ├── TransacaoRepositoryCsv.java
     │           └── TransacaoRepositoryJdbc.java
     └── test
         └── java
@@ -67,13 +67,13 @@ O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao ac
             │   └── TransacaoTest.java
             └── persistence
                 ├── ContaRepositoryJdbcTest.java
-                ├── ContaRepositoryTest.java
+                ├── ContaRepositoryCsvTest.java
                 ├── ConexaoBancoTest.java
                 ├── InicializadorBancoTest.java
                 ├── MigradorCsvParaJdbcTest.java
                 ├── PersistenciaBancoServiceTest.java
-                ├── TransacaoRepositoryJdbcTest.java
-                └── TransacaoRepositoryTest.java
+                ├── TransacaoRepositoryCsvTest.java
+                └── TransacaoRepositoryJdbcTest.java
 ```
 
 A pasta `target/` e gerada automaticamente pelo Maven durante compilacao e testes. Ela nao faz parte do codigo-fonte.
@@ -98,8 +98,8 @@ A pasta `data/` é usada em tempo de execução e pode conter o arquivo `banco.d
 - `persistence.ContaRepositoryJdbc`: salva e carrega as contas no banco `data/banco.db`.
 - `persistence.TransacaoRepositoryJdbc`: salva e carrega as transacoes no banco `data/banco.db`.
 - `persistence.MigradorCsvParaJdbc`: converte os dados antigos de CSV para o banco SQLite.
-- `persistence.ContaRepository`: persistência legada de contas em CSV.
-- `persistence.TransacaoRepository`: persistência legada de transações em CSV.
+- `persistence.ContaRepositoryCsv`: persistência legada de contas em CSV.
+- `persistence.TransacaoRepositoryCsv`: persistência legada de transações em CSV.
 
 ## Persistência atual
 
@@ -111,7 +111,7 @@ A persistência principal do projeto agora usa SQLite via JDBC.
 - As contas são salvas e carregadas por `ContaRepositoryJdbc`.
 - As transações/extrato são salvas e carregadas por `TransacaoRepositoryJdbc`.
 - `ConexaoBanco` fornece a conexão JDBC para `data/banco.db`.
-- `ContaRepository` e `TransacaoRepository` ainda existem como persistência legada em CSV, usada apenas para apoiar a migração CSV -> SQLite.
+- `ContaRepositoryCsv` e `TransacaoRepositoryCsv` ainda existem como persistência legada em CSV, usada apenas para apoiar a migração CSV -> SQLite.
 
 Na prática, isso significa: quando tudo é salvo sem erro, o sistema confirma as alterações com `commit`; se algo falha no meio do processo, faz `rollback` e desfaz tudo para não deixar dados pela metade.
 
@@ -154,8 +154,8 @@ Classes de teste atuais:
 - `ResultadoTransferenciaTest`: valida os valores esperados do enum de resultados de transferencia.
 - `ContaRepositoryJdbcTest`: valida salvamento e carregamento de contas em SQLite.
 - `TransacaoRepositoryJdbcTest`: valida salvamento e carregamento de transacoes em SQLite.
-- `ContaRepositoryTest`: valida a persistência legada de contas em CSV.
-- `TransacaoRepositoryTest`: valida a persistência legada de transações em CSV.
+- `ContaRepositoryCsvTest`: valida a persistência legada de contas em CSV.
+- `TransacaoRepositoryCsvTest`: valida a persistência legada de transações em CSV.
 - `ConexaoBancoTest`: valida a configuracao da conexao SQLite.
 - `InicializadorBancoTest`: valida a criacao e inicializacao das tabelas.
 - `MigradorCsvParaJdbcTest`: valida a migracao de CSV para SQLite.

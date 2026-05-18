@@ -44,8 +44,8 @@ class MigradorCsvParaJdbcTest {
         InicializadorBanco inicializadorBanco = new InicializadorBanco(conexaoBanco);
         inicializadorBanco.inicializar();
 
-        ContaRepository contaRepositoryCsv = new ContaRepository(caminhoContasCsv);
-        TransacaoRepository transacaoRepositoryCsv = new TransacaoRepository(caminhoTransacoesCsv);
+        ContaRepositoryCsv contaRepositoryCsv = new ContaRepositoryCsv(caminhoContasCsv);
+        TransacaoRepositoryCsv transacaoRepositoryCsv = new TransacaoRepositoryCsv(caminhoTransacoesCsv);
         ContaRepositoryJdbc contaRepositoryJdbc = new ContaRepositoryJdbc(conexaoBanco);
         TransacaoRepositoryJdbc transacaoRepositoryJdbc = new TransacaoRepositoryJdbc(conexaoBanco);
 

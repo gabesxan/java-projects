@@ -8,11 +8,11 @@ import java.util.List;
 
 import model.Conta;
 
-public class ContaRepository {
+public class ContaRepositoryCsv {
 
     private final Path caminhoArquivo;
 
-    public ContaRepository(Path caminhoArquivo) {
+    public ContaRepositoryCsv(Path caminhoArquivo) {
         this.caminhoArquivo = caminhoArquivo;
     }
 

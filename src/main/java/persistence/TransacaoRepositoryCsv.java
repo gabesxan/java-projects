@@ -11,11 +11,11 @@ import model.Conta;
 import model.TipoOperacao;
 import model.Transacao;
 
-public class TransacaoRepository {
+public class TransacaoRepositoryCsv {
 
     private final Path caminhoArquivo;
 
-    public TransacaoRepository(Path caminhoArquivo) {
+    public TransacaoRepositoryCsv(Path caminhoArquivo) {
         this.caminhoArquivo = caminhoArquivo;
     }
 

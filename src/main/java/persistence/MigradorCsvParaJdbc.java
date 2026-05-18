@@ -9,14 +9,14 @@ import model.Transacao;
 
 public class MigradorCsvParaJdbc {
 
-    private final ContaRepository contaRepositoryCsv;
-    private final TransacaoRepository transacaoRepositoryCsv;
+    private final ContaRepositoryCsv contaRepositoryCsv;
+    private final TransacaoRepositoryCsv transacaoRepositoryCsv;
     private final ContaRepositoryJdbc contaRepositoryJdbc;
     private final TransacaoRepositoryJdbc transacaoRepositoryJdbc;
 
     public MigradorCsvParaJdbc(
-            ContaRepository contaRepositoryCsv,
-            TransacaoRepository transacaoRepositoryCsv,
+            ContaRepositoryCsv contaRepositoryCsv,
+            TransacaoRepositoryCsv transacaoRepositoryCsv,
             ContaRepositoryJdbc contaRepositoryJdbc,
             TransacaoRepositoryJdbc transacaoRepositoryJdbc) {
         this.contaRepositoryCsv = contaRepositoryCsv;
