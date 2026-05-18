@@ -42,22 +42,22 @@ Trocar CSV por JDBC diretamente pode misturar várias mudanças ao mesmo tempo:
 
 Por isso, a integração deve ser feita em etapas pequenas.
 
-## Etapas executadas
+## Etapas concluídas
 
-O plano de integração JDBC já foi realizado no projeto.
+A integração SQLite/JDBC foi concluída no projeto.
 
-- Criação da conexão SQLite em `ConexaoBanco`.
-- Inicialização automática das tabelas com `InicializadorBanco`.
-- Criação dos repositories `ContaRepositoryJdbc` e `TransacaoRepositoryJdbc`.
-- Migração de dados CSV para SQLite por `MigradorCsvParaJdbc` e `MigracaoCsvParaJdbcMain`.
-- Uso de SQLite pela `AplicacaoBancaria` para contas e transações.
+- Adicionar SQLite JDBC.
+- Criar `ConexaoBanco`.
+- Criar `InicializadorBanco`.
+- Criar `ContaRepositoryJdbc`.
+- Criar `TransacaoRepositoryJdbc`.
+- Criar migração CSV -> SQLite com `MigradorCsvParaJdbc` e `MigracaoCsvParaJdbcMain`.
+- Integrar contas e transações na `AplicacaoBancaria`.
 
-## Cuidados
+## Próximos cuidados
 
-- Não alterar regras de negócio em `Conta` e `Banco`.
-- Não misturar integração JDBC com novas funcionalidades.
-- Rodar `mvn test` após cada etapa.
-- Testar manualmente a aplicação de terminal após cada mudança.
-- Não commitar arquivos `.db`.
-- `data/banco.db` não deve ser versionado no Git.
-- O CSV pode ser mantido como legado ou removido em uma etapa futura.
+- Entender profundamente o SQL/JDBC já implementado.
+- Estudar transações de banco, commit e rollback.
+- Avaliar no futuro se o legado CSV será removido.
+- Não versionar a pasta `data/`.
+- Manter os testes passando.

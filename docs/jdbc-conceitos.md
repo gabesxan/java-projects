@@ -4,7 +4,7 @@ JDBC significa **Java Database Connectivity**.
 
 Ele é o recurso usado em Java para conectar uma aplicação a um banco de dados relacional.
 
-Neste projeto, JDBC será estudado depois do modelo conceitual do banco, para que a aplicação possa futuramente substituir a persistência em CSV por persistência em banco de dados.
+Neste projeto, JDBC foi estudado e aplicado depois do modelo conceitual do banco, permitindo que a aplicação substituísse a persistência em CSV por SQLite/JDBC.
 
 No projeto atual, esses conceitos já foram aplicados usando SQLite. As classes principais da integração são `ConexaoBanco`, `InicializadorBanco`, `ContaRepositoryJdbc` e `TransacaoRepositoryJdbc`.
 
@@ -42,6 +42,8 @@ Sem o driver, o Java conhece a ideia de JDBC, mas não sabe se comunicar com o b
 
 No Maven, um driver normalmente entra como dependência no `pom.xml`.
 
+No projeto atual, a dependência do driver SQLite já está presente.
+
 Exemplo conceitual:
 
 ```xml
@@ -52,7 +54,7 @@ Exemplo conceitual:
 </dependency>
 ```
 
-Ainda não vamos adicionar essa dependência até entender bem o fluxo.
+A dependência do driver SQLite já está adicionada no projeto atual.
 
 ## URL de conexão
 
@@ -108,7 +110,7 @@ Exemplo conceitual:
 Connection conexao = DriverManager.getConnection(url);
 ```
 
-Ainda não estamos implementando, mas a ideia é:
+Na implementação atual, esse é o fluxo usado:
 
 ```text
 pegar a URL do banco
@@ -305,27 +307,16 @@ Esse assunto pode ficar para depois do primeiro contato com JDBC, mas é importa
 
 ## Repository JDBC
 
-Hoje o projeto tem repositories para persistência em CSV.
+Hoje o projeto tem repositories para persistência em CSV e também repositórios JDBC ativos. A implementação atual usa `ContaRepositoryJdbc` e `TransacaoRepositoryJdbc` para salvar e carregar dados no banco SQLite. Os repositories CSV ainda existem como legado e suporte para migração.
 
-Na fase JDBC, a ideia será criar repositories que salvam e carregam dados do banco.
-
-Exemplos possíveis:
-
-```text
-ContaRepositoryCsv
-TransacaoRepositoryCsv
-ContaRepositoryJdbc
-TransacaoRepositoryJdbc
-```
-
-Ou, se o projeto for simplificar:
+Exemplos no projeto:
 
 ```text
 ContaRepository
 TransacaoRepository
+ContaRepositoryJdbc
+TransacaoRepositoryJdbc
 ```
-
-mas mudando a implementação interna.
 
 Responsabilidade de um repository JDBC:
 
@@ -439,9 +430,9 @@ Fluxo conceitual:
 ResultSet -> ler tipo, valor, data_hora, descricao -> criar Transacao
 ```
 
-## Ordem provável de implementação futura
+## Ordem de implementação usada
 
-Quando chegar a hora de implementar JDBC, uma ordem segura seria:
+A seguinte ordem foi adotada para implementar o suporte SQLite/JDBC no projeto:
 
 1. Escolher SQLite como banco inicial.
 2. Adicionar o driver SQLite JDBC no `pom.xml`.
@@ -453,19 +444,8 @@ Quando chegar a hora de implementar JDBC, uma ordem segura seria:
 8. Criar repository JDBC para transações.
 9. Testar salvar e carregar transações.
 10. Integrar extrato na aplicação.
-11. Avaliar se os repositories CSV serão mantidos ou substituídos.
+11. Avaliar se os repositories CSV seriam mantidos ou substituídos como legado.
 
-## O que ainda não fazer
 
-Nesta etapa, ainda não devemos:
 
-- adicionar dependência JDBC no `pom.xml`;
-- criar conexão com banco;
-- criar arquivo `.db`;
-- substituir CSV;
-- alterar `AplicacaoBancaria`;
-- alterar regras de negócio;
-- usar Spring Boot;
-- criar API REST.
 
-O objetivo agora é entender os conceitos antes de implementar.

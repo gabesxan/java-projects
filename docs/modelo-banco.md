@@ -1,8 +1,8 @@
 # Modelo conceitual do banco de dados
 
-O objetivo deste documento é planejar, em linguagem simples, como os dados do simulador bancário poderão ser organizados futuramente em um banco de dados relacional.
+O objetivo deste documento é planejar, em linguagem simples, como os dados do simulador bancário podem ser organizados em um banco de dados relacional.
 
-Este documento ainda não implementa banco de dados no projeto. Ele serve como preparação para uma futura etapa com SQL e JDBC.
+Este documento começou como um plano conceitual e o modelo já foi aplicado no projeto usando SQLite. As tabelas principais reais são `contas` e `transacoes`.
 
 No projeto atual, o modelo conceitual de contas e transações já foi aplicado em SQLite. As tabelas principais são `contas` e `transacoes`.
 
@@ -220,11 +220,11 @@ Exemplo ruim de tabela única:
 
 O titular e o saldo ficariam repetidos em cada transação.
 
-Separar em duas tabelas deixa o modelo mais limpo e prepara o projeto para uma futura implementação com SQL/JDBC.
+Separar em duas tabelas deixa o modelo mais limpo e reflete a implementação já usada na etapa SQLite/JDBC.
 
 ## SQL conceitual inicial
 
-Abaixo está uma primeira versão dos comandos SQL que poderiam criar as tabelas futuramente.
+Abaixo está uma versão dos comandos SQL que refletem a estrutura usada na implementação SQLite/JDBC atual.
 
 ```sql
 CREATE TABLE contas (
@@ -244,7 +244,7 @@ CREATE TABLE transacoes (
 );
 ```
 
-Esses comandos ainda não são executados pela aplicação. Eles servem apenas para estudar o modelo que será usado em uma futura etapa com SQL/JDBC.
+Estes comandos refletem a estrutura SQL usada pela aplicação SQLite/JDBC atual.
 
 - `CREATE TABLE` cria uma tabela.
 - `INTEGER` representa número inteiro.
