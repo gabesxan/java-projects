@@ -280,11 +280,13 @@ Quando o bloco termina, o Java fecha a conexão automaticamente.
 
 Uma transação de banco de dados é um conjunto de operações que deve ser tratado como uma unidade.
 
-Exemplo no seu projeto:
+Exemplo no projeto atual:
 
 ```text
-transferência entre contas
+salvar contas e transações juntas em uma única operação
 ```
+
+No projeto, `PersistenciaBancoService` coordena essa gravação e garante que as operações de persistência aconteçam de forma conjunta.
 
 Uma transferência envolve:
 
@@ -299,11 +301,11 @@ Se uma parte falhar, o ideal é desfazer tudo.
 
 Conceitos importantes:
 
-- `commit`: confirma as alterações.
-- `rollback`: desfaz as alterações.
+- `commit`: confirma as alterações quando todas as operações são bem-sucedidas.
+- `rollback`: desfaz as alterações quando alguma operação falha.
 - atomicidade: tudo acontece ou nada acontece.
 
-Esse assunto pode ficar para depois do primeiro contato com JDBC, mas é importante saber que existe.
+Este documento começou como estudo conceitual e agora reflete também o uso real de transações no projeto com `PersistenciaBancoService`.
 
 ## Repository JDBC
 
@@ -441,6 +443,8 @@ No simulador bancário, uma transferência envolve várias mudanças:
 - registrar uma transação enviada;
 - registrar uma transação recebida.
 
+No projeto, esse fluxo é aplicado de forma concreta por `PersistenciaBancoService`, que coordena o salvamento de contas e transações na mesma transação SQL.
+
 Essas operações devem acontecer juntas. Se uma falhar, todas devem ser desfeitas.
 
 `commit` confirma as alterações.
@@ -464,7 +468,6 @@ A seguinte ordem foi adotada para implementar o suporte SQLite/JDBC no projeto:
 9. Testar salvar e carregar transações.
 10. Integrar extrato na aplicação.
 11. Avaliar se os repositories CSV seriam mantidos ou substituídos como legado.
-
 
 
 
