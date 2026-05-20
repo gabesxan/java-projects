@@ -54,10 +54,3 @@ A integração SQLite/JDBC foi concluída no projeto.
 - Criar migração CSV -> SQLite com `MigradorCsvParaJdbc` e `MigracaoCsvParaJdbcMain`.
 - Integrar contas e transações na `AplicacaoBancaria`.
 
-## Próximos cuidados
-
-- Entender profundamente o SQL/JDBC já implementado.
-- Estudar transações de banco, commit e rollback.
-- Avaliar no futuro se o legado CSV será removido.
-- Não versionar a pasta `data/`.
-- Manter os testes passando.
