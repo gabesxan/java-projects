@@ -4,6 +4,15 @@ Projeto educacional de um simulador bancario feito em Java puro, executado pelo 
 
 O projeto nao usa Spring Boot, API web ou interface grafica. Toda a interacao acontece pelo terminal.
 
+## Estado atual
+
+- `AplicacaoBancaria` usa `PersistenciaBancoService` para salvar o estado da aplicacao.
+- `salvarContas()`, `salvarTransacoes()` e `salvarEstadoBanco()` nao fazem mais parte do fluxo principal.
+- Os repositorios CSV foram renomeados para `ContaRepositoryCsv` e `TransacaoRepositoryCsv`.
+- CSV permanece apenas como legado e suporte para migracao.
+- Testes passando: 55.
+- Ultimos commits enviados para `origin/main`.
+
 ## Funcionalidades
 
 - Criar contas bancarias.
@@ -86,7 +95,7 @@ A pasta `data/` é usada em tempo de execução e pode conter o arquivo `banco.d
 
 - `app.Main`: ponto de entrada do programa. Cria a aplicacao bancaria e inicia a execucao.
 - `app.MigracaoCsvParaJdbcMain`: classe para executar a migracao de dados CSV para SQLite.
-- `app.AplicacaoBancaria`: controla o menu, a leitura de dados no terminal e o fluxo das operacoes.
+- `app.AplicacaoBancaria`: controla o menu, a leitura de dados no terminal, o fluxo das operacoes e chama `PersistenciaBancoService` para salvar o estado.
 - `model.Banco`: gerencia as contas, busca por numero e coordena transferencias.
 - `model.Conta`: representa uma conta individual, com numero, titular, saldo e extrato.
 - `model.Transacao`: representa um item do extrato, com tipo, valor, data/hora e descricao.
@@ -107,11 +116,13 @@ A persistência principal do projeto agora usa SQLite via JDBC.
 
 - O banco de dados SQLite fica em `data/banco.db`.
 - Ao iniciar a aplicação, `InicializadorBanco` cria automaticamente as tabelas se elas ainda não existirem.
+- `AplicacaoBancaria` usa `PersistenciaBancoService` para salvar o estado atual do banco.
 - A persistência é coordenada por `PersistenciaBancoService`, que grava contas e transações de forma coordenada em uma única transação SQL.
 - As contas são salvas e carregadas por `ContaRepositoryJdbc`.
 - As transações/extrato são salvas e carregadas por `TransacaoRepositoryJdbc`.
 - `ConexaoBanco` fornece a conexão JDBC para `data/banco.db`.
 - `ContaRepositoryCsv` e `TransacaoRepositoryCsv` ainda existem como persistência legada em CSV, usada apenas para apoiar a migração CSV -> SQLite.
+- Os métodos antigos `salvarContas()`, `salvarTransacoes()` e `salvarEstadoBanco()` não fazem mais parte do fluxo principal da aplicação.
 
 Na prática, isso significa: quando tudo é salvo sem erro, o sistema confirma as alterações com `commit`; se algo falha no meio do processo, faz `rollback` e desfaz tudo para não deixar dados pela metade.
 
