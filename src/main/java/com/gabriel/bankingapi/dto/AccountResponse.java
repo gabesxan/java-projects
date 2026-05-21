@@ -4,10 +4,10 @@ import java.math.BigDecimal;
 
 public class AccountResponse {
 
-    private Long id;
-    private String accountNumber;
-    private String holderName;
-    private BigDecimal balance;
+    private final Long id;
+    private final String accountNumber;
+    private final String holderName;
+    private final BigDecimal balance;
 
     public AccountResponse(Long id, String accountNumber, String holderName, BigDecimal balance) {
         this.id = id;
@@ -31,4 +31,5 @@ public class AccountResponse {
     public BigDecimal getBalance() {
         return balance;
     }
+    
 }

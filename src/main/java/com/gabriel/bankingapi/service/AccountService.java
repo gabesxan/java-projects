@@ -15,7 +15,6 @@ public class AccountService {
                 1L,
                 "000001",
                 request.getHolderName(),
-                BigDecimal.ZERO
-        );
+                BigDecimal.ZERO);
     }
 }
