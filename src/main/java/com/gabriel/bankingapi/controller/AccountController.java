@@ -10,6 +10,8 @@ import com.gabriel.bankingapi.dto.AccountResponse;
 import com.gabriel.bankingapi.dto.CreateAccountRequest;
 import com.gabriel.bankingapi.service.AccountService;
 
+import jakarta.validation.Valid;
+
 @RestController
 public class AccountController {
 
@@ -21,7 +23,7 @@ public class AccountController {
 
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountResponse createAccount(@RequestBody CreateAccountRequest request) {
+    public AccountResponse createAccount(@Valid @RequestBody CreateAccountRequest request) {
         return accountService.createAccount(request);
     }
 }
