@@ -152,10 +152,6 @@ mvn exec:java -Dexec.mainClass=app.MigracaoCsvParaJdbcMain
 .
 ├── pom.xml
 ├── README.md
-├── docs
-│   ├── jdbc-conceitos.md
-│   ├── modelo-banco.md
-│   └── plano-integracao-jdbc.md
 ├── src
 │   ├── main
 │   │   └── java
@@ -260,12 +256,6 @@ src/test/java/persistence
 ```
 
 Testes de persistencia CSV, SQLite/JDBC, migracao e transacao SQL.
-
-```text
-docs
-```
-
-Documentos de estudo que foram incorporados neste README: modelo relacional, conceitos JDBC e plano de integracao JDBC.
 
 ---
 
@@ -778,18 +768,6 @@ O que foi estudado aqui:
 - limpeza de arquivos de teste;
 - banco SQLite isolado por teste;
 - validacao de commit e rollback.
-
----
-
-### Arquivos em `docs`
-
-| Arquivo | Tamanho | Papel original |
-|---|---:|---|
-| `docs/modelo-banco.md` | 395 linhas | Explicava o modelo relacional: tabelas, colunas, chave primaria, chave estrangeira e SQL inicial. |
-| `docs/jdbc-conceitos.md` | 473 linhas | Explicava JDBC: driver, URL, `Connection`, `PreparedStatement`, `ResultSet`, `SQLException` e transacoes. |
-| `docs/plano-integracao-jdbc.md` | 56 linhas | Registrava o plano de integracao gradual entre CSV, SQLite e aplicacao. |
-
-Esses documentos continuam existindo, mas o conteudo principal foi incorporado a este README para centralizar a explicacao do projeto em um unico lugar.
 
 ---
 
