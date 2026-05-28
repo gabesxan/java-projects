@@ -1,0 +1,84 @@
+package persistence;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import model.Conta;
+import model.TipoOperacao;
+
+class TransacaoRepositoryCsvTest {
+
+    private Path pastaTeste;
+    private Path caminhoArquivo;
+
+    @BeforeEach
+    @SuppressWarnings("unused")
+    void preparar() throws Exception {
+        pastaTeste = Path.of("target", "test-data");
+        caminhoArquivo = pastaTeste.resolve("transacoes.csv");
+
+        Files.createDirectories(pastaTeste);
+        Files.deleteIfExists(caminhoArquivo);
+    }
+
+    @AfterEach
+    @SuppressWarnings("unused")
+    void limpar() throws Exception {
+        Files.deleteIfExists(caminhoArquivo);
+    }
+
+    @Test
+    void deveSalvarTransacoesEmArquivo() throws Exception {
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
+
+        Conta conta = new Conta(1, "Gabriel");
+        conta.depositar(150);
+
+        repository.salvar(List.of(conta));
+
+        List<String> linhas = Files.readAllLines(caminhoArquivo);
+
+        assertEquals(1, linhas.size());
+        assertEquals("1;DEPOSITO;150.0;" + conta.getExtrato().get(0).getDataHora() + ";Depósito realizado",
+                linhas.get(0));
+    }
+
+    @Test
+    void deveCarregarTransacoesDoArquivo() throws Exception {
+        Files.write(caminhoArquivo, List.of(
+                "1;DEPOSITO;150.0;2026-05-14T10:30;Depósito realizado"));
+
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
+
+        Conta conta = new Conta(1, "Gabriel");
+        repository.carregar(List.of(conta));
+
+        assertEquals(1, conta.getExtrato().size());
+        assertEquals(TipoOperacao.DEPOSITO, conta.getExtrato().get(0).getTipo());
+        assertEquals(150.0, conta.getExtrato().get(0).getValor());
+        assertEquals("Depósito realizado", conta.getExtrato().get(0).getDescricao());
+    }
+
+    @Test
+    void deveIgnorarLinhaInvalidaAoCarregarTransacoes() throws Exception {
+        Files.write(caminhoArquivo, List.of(
+                "1;DEPOSITO;150.0;2026-05-14T10:30;Depósito realizado",
+                "linha-invalida",
+                "1;SAQUE;50.0;2026-05-14T11:00;Saque realizado"));
+
+        TransacaoRepositoryCsv repository = new TransacaoRepositoryCsv(caminhoArquivo);
+
+        Conta conta = new Conta(1, "Gabriel");
+        repository.carregar(List.of(conta));
+
+        assertEquals(2, conta.getExtrato().size());
+        assertEquals(TipoOperacao.DEPOSITO, conta.getExtrato().get(0).getTipo());
+        assertEquals(TipoOperacao.SAQUE, conta.getExtrato().get(1).getTipo());
+    }
+}

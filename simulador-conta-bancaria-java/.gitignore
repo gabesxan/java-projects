@@ -1,0 +1,6 @@
+*.class
+bin/
+.vscode/
+.DS_Store
+target/
+data/
